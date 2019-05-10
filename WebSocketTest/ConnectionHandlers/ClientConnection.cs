@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using WebSocketTest.Decoders;
@@ -20,7 +21,6 @@ namespace WebSocketTest.ConnectionHandlers
             while (client.Available < 3)
             {// wait for enough bytes to be available
             }
-
             
             string data = Encoding.UTF8.GetString(ReadStream(true));
 
@@ -44,7 +44,11 @@ namespace WebSocketTest.ConnectionHandlers
                 // sleeping for lower cpu usage
                 while (!stream.DataAvailable) Thread.Sleep(500);
 
-                byte[] resp = MessageDecoder.DecodeMessage(ReadStream());
+                string incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
+
+                Console.WriteLine(incomingMessage);
+
+                byte[] resp = Message.GenerateMessage("Hello World");
 
                 stream.Write(resp, 0, resp.Length);
 

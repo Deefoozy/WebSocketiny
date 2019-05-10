@@ -7,7 +7,7 @@ namespace WebSocketTest.Decoders
 {
     class MessageDecoder
     {
-        public static byte[] DecodeMessage(byte[] message)
+        public static string DecodeMessage(byte[] message)
         {
             byte secondByte = message[1];
             int dataLength = secondByte & 127;
@@ -28,14 +28,7 @@ namespace WebSocketTest.Decoders
                 decoded[decodedIndex] = (byte)(message[encodedIndex] ^ keys.ElementAt(decodedIndex % 4));
             }
 
-            string incomingData = Encoding.UTF8.GetString(decoded, 0, decoded.Length);
-            Console.WriteLine(incomingData);
-
-            byte[] resp = Encoding.UTF8.GetBytes("  " + "Message");
-            resp[0] = 129;
-            resp[1] = (byte)(resp.Length - 2);
-
-            return resp;
+            return Encoding.UTF8.GetString(decoded, 0, decoded.Length); ;
         }
     }
 }
