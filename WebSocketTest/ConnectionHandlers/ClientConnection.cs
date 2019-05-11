@@ -13,13 +13,20 @@ namespace WebSocketTest.ConnectionHandlers
         NetworkStream stream;
         int messageAmount = 0;
 
-        public void Accept(object tcpClient)
+        public ClientConnection(TcpClient tcpClient)
         {
-            client = (TcpClient)tcpClient;
+            client = tcpClient;
             stream = client.GetStream();
 
-            while (client.Available < 3)
-            {// wait for enough bytes to be available
+            Accept();
+        }
+
+        public void Accept()
+        {
+            // TODO: Check if we need to wait for incoming data
+            while (client.Available < Encoding.UTF8.GetByteCount("GET"))
+            {
+                // Wait for enough bytes to be available
             }
             
             string data = Encoding.UTF8.GetString(ReadStream(true));
@@ -41,8 +48,9 @@ namespace WebSocketTest.ConnectionHandlers
             // Replace these loops for some async option for improved performance
             while (open)
             {
-                // sleeping for lower cpu usage
-                while (!stream.DataAvailable) Thread.Sleep(500);
+                // Sleeping for lower cpu usage
+                while (!stream.DataAvailable)
+                    Thread.Sleep(1);
 
                 string incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
 
@@ -56,6 +64,7 @@ namespace WebSocketTest.ConnectionHandlers
                 messageAmount++;
                 open = messageAmount < 5;
             }
+            Console.WriteLine("Closed client connection");
         }
 
         private void SendHandshake(byte[] handshake)

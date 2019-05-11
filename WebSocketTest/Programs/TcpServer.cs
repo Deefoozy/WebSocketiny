@@ -17,7 +17,8 @@ namespace WebSocketTest.Programs
 
         public TcpServer()
         {
-            TcpListener server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8080);
+            // Link to localhost, not to the outside world
+            TcpListener server = new TcpListener(IPAddress.Loopback, 8080);
             server.Start();
 
             Console.WriteLine("Listener set up and listening on 127.0.0.1:8080");
@@ -29,10 +30,10 @@ namespace WebSocketTest.Programs
 
                 Console.WriteLine("Client accepted");
 
-                ClientConnection clientConnection = new ClientConnection();
-
-                Thread newThread = new Thread(new ParameterizedThreadStart(clientConnection.Accept));
-                newThread.Start(client);
+                Thread newThread = new Thread(() => {
+                    new ClientConnection(client);
+                });
+                newThread.Start();
                 currentThreads.Add(newThread);
 
                 // Instantly close to keep flow simple
