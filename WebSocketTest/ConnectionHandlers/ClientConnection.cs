@@ -38,6 +38,8 @@ namespace WebSocketTest.ConnectionHandlers
 
             WaitForMessage(data);
 
+            Console.WriteLine("Closed client connection");
+
             stream.Close();
         }
 
@@ -64,7 +66,6 @@ namespace WebSocketTest.ConnectionHandlers
                 messageAmount++;
                 open = messageAmount < 5;
             }
-            Console.WriteLine("Closed client connection");
         }
 
         private void SendHandshake(byte[] handshake)
