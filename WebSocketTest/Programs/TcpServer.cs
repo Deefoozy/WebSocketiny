@@ -9,8 +9,9 @@ namespace WebSocketTest.Programs
 {
     class TcpServer
     {
-        private bool _isRunning = true;
         private int _connectionAmount = 0;
+        private bool _isAccepting = true;
+        private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
 
         // Maybe create a class with a thread that will contain a list of streams it could handle
         // Would make it easier to read probably
@@ -19,11 +20,12 @@ namespace WebSocketTest.Programs
         public TcpServer()
         {
             // Link to localhost, not to the outside world
-            TcpListener server = new TcpListener(IPAddress.Loopback, 8080);
+            TcpListener server = new TcpListener(endpoint);
+
             server.Start();
 
-            Console.WriteLine("Listener set up and listening on 127.0.0.1:8080");
-            while (_isRunning)
+            Console.WriteLine($"Listener set up and listening on {endpoint}");
+            while (_isAccepting)
             {
                 Console.WriteLine("Waiting for client");
 
@@ -38,9 +40,8 @@ namespace WebSocketTest.Programs
                 // currentThreads.Add(newThread);
 
                 // Instantly close to keep flow simple
-                // _isRunning = false;
+                // _isAccepting = false;
             }
-            Console.ReadKey();
         }
     }
 }

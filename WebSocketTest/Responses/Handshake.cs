@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Security.Cryptography;
-using System.Linq;
 using System.Text;
 
 namespace WebSocketTest.Responses
 {
     static class Handshake
     {
-        public static byte[] GenerateHandshake(string data)
+        /// <summary>
+        /// Name of the header send by the connecting client. Containing the key sent by the connecting client. Used to form the full response key
+        /// </summary>
+        private const string CLIENT_KEY_REQUEST_HEADER = "Sec-WebSocket-Key: ";
+        private const string SERVER_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+
+        public static byte[] GenerateHandshake(string clientRequest)
         {
-            string secWebSocketString = "Sec-WebSocket-Key: ";
-            int secWebSocketKeyPosition = data.IndexOf(secWebSocketString) + secWebSocketString.Count();
-            string receivedKey = data.Substring(secWebSocketKeyPosition, 24);
-            string responseKey = receivedKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+            Console.WriteLine(clientRequest);
+
+            int secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
+            string receivedKey = clientRequest.Substring(secWebSocketKeyPosition, 24);
+            string responseKey = receivedKey + SERVER_KEY;
 
             const string eol = "\r\n";
             return Encoding.UTF8.GetBytes(
