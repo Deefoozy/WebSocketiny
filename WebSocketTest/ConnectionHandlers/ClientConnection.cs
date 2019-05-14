@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.IO;
 using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
 
@@ -9,14 +10,17 @@ namespace WebSocketTest.ConnectionHandlers
 {
     class ClientConnection
     {
-        TcpClient client;
-        NetworkStream stream;
+        readonly TcpClient client;
+        readonly NetworkStream stream;
+        public readonly int id;
         int messageAmount = 0;
+        
 
-        public ClientConnection(TcpClient tcpClient)
+        public ClientConnection(TcpClient tcpClient, int clientId)
         {
             client = tcpClient;
             stream = client.GetStream();
+            id = clientId;
 
             Accept();
         }
@@ -25,9 +29,7 @@ namespace WebSocketTest.ConnectionHandlers
         {
             // TODO: Check if we need to wait for incoming data
             while (client.Available < Encoding.UTF8.GetByteCount("GET"))
-            {
-                // Wait for enough bytes to be available
-            }
+                Thread.Sleep(1);
             
             string data = Encoding.UTF8.GetString(ReadStream(true));
 
@@ -36,14 +38,14 @@ namespace WebSocketTest.ConnectionHandlers
                 SendHandshake(Handshake.GenerateHandshake(data));
             }
 
-            WaitForMessage(data);
+            WaitForMessage();
 
-            Console.WriteLine("Closed client connection");
+            Console.WriteLine($"{id} | Closed client connection");
 
             stream.Close();
         }
 
-        private void WaitForMessage(string data)
+        private void WaitForMessage()
         {
             bool open = true;
 
@@ -56,7 +58,7 @@ namespace WebSocketTest.ConnectionHandlers
 
                 string incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
 
-                Console.WriteLine(incomingMessage);
+                Console.WriteLine($"{id} | {incomingMessage}");
 
                 byte[] resp = Message.GenerateMessage("Hello World");
 

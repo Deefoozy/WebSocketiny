@@ -10,6 +10,7 @@ namespace WebSocketTest.Programs
     class TcpServer
     {
         private bool _isRunning = true;
+        private int _connectionAmount = 0;
 
         // Maybe create a class with a thread that will contain a list of streams it could handle
         // Would make it easier to read probably
@@ -31,13 +32,13 @@ namespace WebSocketTest.Programs
                 Console.WriteLine("Client accepted");
 
                 Thread newThread = new Thread(() => {
-                    new ClientConnection(client);
+                    new ClientConnection(client, _connectionAmount);
                 });
                 newThread.Start();
-                currentThreads.Add(newThread);
+                // currentThreads.Add(newThread);
 
                 // Instantly close to keep flow simple
-                _isRunning = false;
+                // _isRunning = false;
             }
             Console.ReadKey();
         }
