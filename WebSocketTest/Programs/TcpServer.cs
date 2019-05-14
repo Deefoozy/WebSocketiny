@@ -15,7 +15,7 @@ namespace WebSocketTest.Programs
 
         // Maybe create a class with a thread that will contain a list of streams it could handle
         // Would make it easier to read probably
-        private List<Thread> currentThreads = new List<Thread>();
+        // private List<Thread> currentThreads = new List<Thread>();
 
         public TcpServer()
         {
