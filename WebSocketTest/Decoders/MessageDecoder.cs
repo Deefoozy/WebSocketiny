@@ -7,7 +7,7 @@ namespace WebSocketTest.Decoders
 {
     class MessageDecoder
     {
-        public static Message DecodeMessage(byte[] message)
+        public static ReceivedMessage DecodeMessage(byte[] message)
         {
             byte secondByte = message[1];
             int dataLength = secondByte & 127;
@@ -18,7 +18,7 @@ namespace WebSocketTest.Decoders
             else if (dataLength == 127)
                 indexFirstMask = 10;
             else if (dataLength == 0)
-                return new Message("", true);
+                return new ReceivedMessage("", true);
 
             IEnumerable<byte> keys = message.Skip(indexFirstMask).Take(4);
             int indexFirstDataByte = indexFirstMask + 4;
@@ -29,7 +29,7 @@ namespace WebSocketTest.Decoders
                 decoded[decodedIndex] = (byte)(message[encodedIndex] ^ keys.ElementAt(decodedIndex % 4));
             }
 
-            return new Message(Encoding.UTF8.GetString(decoded, 0, decoded.Length), false);
+            return new ReceivedMessage(Encoding.UTF8.GetString(decoded, 0, decoded.Length), false);
         }
     }
 
@@ -38,7 +38,7 @@ namespace WebSocketTest.Decoders
         public readonly string content;
         public readonly bool close;
 
-        public Message(string receivedContent, bool closeConnection)
+        public ReceivedMessage(string receivedContent, bool closeConnection)
         {
             content = receivedContent;
             close = closeConnection;
