@@ -58,15 +58,15 @@ namespace WebSocketTest.ConnectionHandlers
 
                 string incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
 
-                Console.WriteLine($"{id} | {incomingMessage}");
+                // Console.WriteLine($"{id} | {incomingMessage}");
 
                 byte[] resp = Message.GenerateMessage("Hello World");
 
                 stream.Write(resp, 0, resp.Length);
 
                 // This is just here for testing connection closing
-                messageAmount++;
-                open = messageAmount < 5;
+                // messageAmount++;
+                // open = messageAmount < 50;
             }
         }
 

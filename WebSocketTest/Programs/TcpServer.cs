@@ -25,18 +25,20 @@ namespace WebSocketTest.Programs
             server.Start();
 
             Console.WriteLine($"Listener set up and listening on {endpoint}");
+            Console.WriteLine("Waiting for clients");
+
             while (_isAccepting)
             {
-                Console.WriteLine("Waiting for client");
 
                 TcpClient client = server.AcceptTcpClient();
 
-                Console.WriteLine("Client accepted");
+                Console.WriteLine($"Client | {_connectionAmount}");
 
                 Thread newThread = new Thread(() => {
                     new ClientConnection(client, _connectionAmount);
                 });
                 newThread.Start();
+                _connectionAmount++;
                 // currentThreads.Add(newThread);
 
                 // Instantly close to keep flow simple

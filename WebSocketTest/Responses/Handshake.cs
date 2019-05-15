@@ -14,8 +14,6 @@ namespace WebSocketTest.Responses
 
         public static byte[] GenerateHandshake(string clientRequest)
         {
-            Console.WriteLine(clientRequest);
-
             int secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
             string receivedKey = clientRequest.Substring(secWebSocketKeyPosition, 24);
             string responseKey = receivedKey + SERVER_KEY;
