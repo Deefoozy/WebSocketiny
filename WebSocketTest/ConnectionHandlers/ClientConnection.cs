@@ -49,16 +49,18 @@ namespace WebSocketTest.ConnectionHandlers
         {
             bool open = true;
 
-            // Replace these loops for some async option for improved performance
             while (open)
             {
-                // Sleeping for lower cpu usage
+                // Putting thread into low priority
                 while (!stream.DataAvailable)
                     Thread.Sleep(1);
 
-                string incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
+                ReceivedMessage incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
 
-                // Console.WriteLine($"{id} | {incomingMessage}");
+                if (incomingMessage.close)
+                    break;
+
+                Console.WriteLine($"{id} | {incomingMessage.content}");
 
                 byte[] resp = Message.GenerateMessage("Hello World");
 
