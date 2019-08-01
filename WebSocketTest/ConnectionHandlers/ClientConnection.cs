@@ -40,9 +40,9 @@ namespace WebSocketTest.ConnectionHandlers
 
             WaitForMessage();
 
-            Console.WriteLine($"{id} | Closed client connection");
-
             stream.Close();
+
+            Console.WriteLine($"{id} | Closed client connection");
         }
 
         private void WaitForMessage()
@@ -62,7 +62,8 @@ namespace WebSocketTest.ConnectionHandlers
 
                 Console.WriteLine($"{id} | {incomingMessage.content}");
 
-                byte[] resp = Message.GenerateMessage("Hello World");
+                byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
+                // byte[] resp = Message.GenerateMessage("yes my dude");
 
                 stream.Write(resp, 0, resp.Length);
 
