@@ -4,46 +4,53 @@ using System.Net;
 using System.Threading;
 using System.Collections.Generic;
 using WebSocketTest.ConnectionHandlers;
+using WebSocketTest.Datatypes;
 
 namespace WebSocketTest.Programs
 {
-    class TcpServer
-    {
-        private int _connectionAmount = 0;
-        private bool _isAccepting = true;
-        private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Loopback, 8080);
+	static class TcpServer
+	{
+		static private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
 
-        // Maybe create a class with a thread that will contain a list of streams it could handle
-        // Would make it easier to read probably
-        // private List<Thread> currentThreads = new List<Thread>();
+		static private bool _isAccepting = true;
+		static public int connectionAmount = 0;
 
-        public TcpServer()
-        {
-            // Link to localhost, not to the outside world
-            TcpListener server = new TcpListener(endpoint);
+		// Maybe create a class with a thread that will contain a list of streams it could handle
+		// Would make it easier to read probably
+		// private List<Thread> currentThreads = new List<Thread>();
 
-            server.Start();
+		internal static void InitTcpServer()
+		{
+			// Link to localhost, not to the outside world
+			Console.WriteLine("Setting up clientConnection handler");
+			ClientConnection clientConnection = new ClientConnection();
 
-            Console.WriteLine($"Listener set up and listening on {endpoint}");
-            Console.WriteLine("Waiting for clients");
+			TcpListener server = new TcpListener(endpoint);
 
-            while (_isAccepting)
-            {
+			server.Start();
 
-                TcpClient client = server.AcceptTcpClient();
+			Console.WriteLine($"Listener set up and listening on {endpoint}");
+			Console.WriteLine("Waiting for clients");
 
-                Console.WriteLine($"Client | {_connectionAmount}");
+			while (_isAccepting)
+			{
+				TcpClient client = server.AcceptTcpClient();
 
-                Thread newThread = new Thread(() => {
-                    new ClientConnection(client, _connectionAmount);
-                });
-                newThread.Start();
-                _connectionAmount++;
-                // currentThreads.Add(newThread);
+				Client temporaryClient = new Client(connectionAmount, client);
 
-                // Instantly close to keep flow simple
-                // _isAccepting = false;
-            }
-        }
-    }
+				Console.WriteLine($"Client | {connectionAmount}");
+
+				Thread newThread = new Thread(() =>
+				{
+					clientConnection.Accept(temporaryClient);
+				});
+
+				newThread.Start();
+				connectionAmount++;
+
+				// Instantly close to keep flow simple
+				// _isAccepting = false;
+			}
+		}
+	}
 }

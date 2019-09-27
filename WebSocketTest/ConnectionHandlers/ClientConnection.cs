@@ -2,87 +2,154 @@
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.IO;
+using System.Collections.Generic;
 using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
+using WebSocketTest.Datatypes;
+using WebSocketTest.ResponseHandlers;
+using Newtonsoft.Json;
 
 namespace WebSocketTest.ConnectionHandlers
 {
-    class ClientConnection
-    {
-        readonly TcpClient client;
-        readonly NetworkStream stream;
-        public readonly int id;
-        int messageAmount = 0;
-        
+	class ClientConnection
+	{
+		public List<Client> activeClients = new List<Client>();
+		public List<Game> activeGames = new List<Game>();
+		private int gameId = 0;
 
-        public ClientConnection(TcpClient tcpClient, int clientId)
-        {
-            client = tcpClient;
-            stream = client.GetStream();
-            id = clientId;
+		public ClientConnection()
+		{
+			for (int i = 0; i < 5; i++)
+				activeGames.Add(new Game(gameId++));
+		}
 
-            Accept();
-        }
+		public void Accept(Client clientData)
+		{
+			while (clientData.client.Available < Encoding.UTF8.GetByteCount("GET"))
+				Thread.Sleep(1);
 
-        public void Accept()
-        {
-            // TODO: Check if we need to wait for incoming data
-            while (client.Available < Encoding.UTF8.GetByteCount("GET"))
-                Thread.Sleep(1);
-            
-            string data = Encoding.UTF8.GetString(ReadStream(true));
+			string data = Encoding.UTF8.GetString(ReadStream(clientData, true));
 
-            if (data.StartsWith("GET"))
-            {
-                SendHandshake(Handshake.GenerateHandshake(data));
-            }
 
-            WaitForMessage();
+			if (data.StartsWith("GET"))
+			{
+				SendHandshake(clientData, Handshake.GenerateHandshake(data));
+			}
 
-            stream.Close();
+			activeClients.Add(clientData);
 
-            Console.WriteLine($"{id} | Closed client connection");
-        }
+			AssignToGame(clientData, activeGames);
 
-        private void WaitForMessage()
-        {
-            bool open = true;
+			WaitForMessage(clientData);
 
-            while (open)
-            {
-                // Putting thread into low priority
-                while (!stream.DataAvailable)
-                    Thread.Sleep(1);
+			clientData.client.GetStream().Close();
 
-                ReceivedMessage incomingMessage = MessageDecoder.DecodeMessage(ReadStream());
+			Console.WriteLine($"{clientData.id} | Closed client connection");
+		}
 
-                if (incomingMessage.close)
-                    break;
+		private void WaitForMessage(Client clientData)
+		{
+			bool open = true;
 
-                Console.WriteLine($"{id} | {incomingMessage.content}");
+			while (open)
+			{
+				if (!clientData.client.Connected)
+					return;
 
-                byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
-                // byte[] resp = Message.GenerateMessage("yes my dude");
+				// Put thread in low priority pool if no data is available
+				while (!clientData.client.GetStream().DataAvailable)
+				{
+					// Check if client is still connected
+					if (clientData.client.Client.Poll(10, SelectMode.SelectRead))
+					{
+						RemoveClient(clientData.id);
+						break;
+					}
 
-                stream.Write(resp, 0, resp.Length);
+					Thread.Sleep(1);
+				}
 
-                // This is just here for testing connection closing
-                // messageAmount++;
-                // open = messageAmount < 50;
-            }
-        }
+				ReceivedMessage incomingMessage = MessageDecoder.DecodeMessage(ReadStream(clientData));
 
-        private void SendHandshake(byte[] handshake)
-        {
-            stream.Write(handshake, 0, handshake.Length);
-        }
+				if (incomingMessage.close)
+				{
+					RemoveClient(clientData.id);
+					break;
+				}
 
-        private byte[] ReadStream(bool initial = false)
-        {
-            byte[] bytes = new byte[initial ? client.Available : 1024];
-            stream.Read(bytes, 0, bytes.Length);
-            return bytes;
-        }
-    }
+				MessageSender.SendToAll("a", activeClients);
+
+				// DO WHATEVS
+
+				Console.WriteLine($"{clientData.id} | {incomingMessage.content}");
+
+				// byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
+				// byte[] resp = Message.GenerateMessage("yes my dude");
+
+				// stream.Write(resp, 0, resp.Length);
+
+				// This is just here for testing connection closing
+				// messageAmount++;
+				// open = messageAmount < 50;
+			}
+		}
+
+		private void SendHandshake(Client clientData, byte[] handshake)
+		{
+			clientData.client.GetStream().Write(handshake, 0, handshake.Length);
+		}
+
+		private byte[] ReadStream(Client clientData, bool initial = false)
+		{
+			byte[] bytes = new byte[initial ? clientData.client.Available : 1024];
+			clientData.client.GetStream().Read(bytes, 0, bytes.Length);
+			return bytes;
+		}
+
+		private void RemoveClient(int id)
+		{
+			for (int i = 0; i < activeClients.Count; i++)
+				if (activeClients[i].id == id)
+				{
+					activeClients.RemoveAt(i);
+					break;
+				}
+		}
+
+		private void AssignToGame(Client passedClient, List<Game> gamePool)
+		{
+			for (int i = 0; i < gamePool.Count; i++)
+			{
+				if (gamePool[i].playerAmount < 2)
+				{
+					gamePool[i].AddPlayer(passedClient);
+					break;
+				}
+			}
+		}
+
+		private void UpdateGameList()
+		{
+			// Faulty logic | fix later
+			if (activeGames.Count == 0)
+			{
+				activeGames.Add(new Game(gameId++));
+			}
+			else
+			{
+				for (int i = 0; i < activeGames.Count; i++)
+				{
+					if (activeGames[i].playerAmount == 0 && activeGames.Count > 2)
+					{
+						activeGames.RemoveAt(i);
+						i--;
+					}
+					else if (activeGames[i].playerAmount == 2)
+					{
+						activeGames.Add(new Game(gameId++));
+					}
+				}
+			}
+		}
+	}
 }
