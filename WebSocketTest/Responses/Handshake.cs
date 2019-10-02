@@ -6,9 +6,6 @@ namespace WebSocketTest.Responses
 {
 	static class Handshake
 	{
-		/// <summary>
-		/// Name of the header send by the connecting client. Containing the key sent by the connecting client. Used to form the full response key
-		/// </summary>
 		private const string CLIENT_KEY_REQUEST_HEADER = "Sec-WebSocket-Key: ";
 		private const string SERVER_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
