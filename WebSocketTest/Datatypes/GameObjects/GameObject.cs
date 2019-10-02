@@ -12,12 +12,12 @@ namespace WebSocketTest.Datatypes
 		public Velocity2d Velocity { get; private set; }
 		public int MaxSpeed { get; private set; }
 
-		public GameObject(IVector2d pos, IVector2d dim, IVector2d vel)
+		public GameObject(IVector2d position, IVector2d dimensions, IVector2d velocity)
 		{
 			Init(
-				(Position2d)pos,
-				(Dimensions2d)dim,
-				(Velocity2d)vel
+				(Position2d)position,
+				(Dimensions2d)dimensions,
+				(Velocity2d)velocity
 			);
 		}
 
@@ -30,11 +30,11 @@ namespace WebSocketTest.Datatypes
 			);
 		}
 
-		private void Init(Position2d pos, Dimensions2d dim, Velocity2d vel)
+		private void Init(Position2d position, Dimensions2d dimensions, Velocity2d velocity)
 		{
-			Position = pos;
-			Dimensions = dim;
-			Velocity = vel;
+			Position = position;
+			Dimensions = dimensions;
+			Velocity = velocity;
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace WebSocketTest.Datatypes
 		public int playerAmount = 0;
 		public bool ready = false;
 
-		// private Ball ball = new Ball();
+		private Ball ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
 
 		public Game(int passedId)
 		{
@@ -24,9 +24,7 @@ namespace WebSocketTest.Datatypes
 		{
 			if (!ready)
 			{
-				// client with pos
-				players[playerAmount] = new Player(new Vector2d(0, 0), new Vector2d(0, 0), new Vector2d(0, 0));
-				// set client data
+				players[playerAmount] = new Player(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
 				players[playerAmount].BindPlayer(targetClient, playerAmount);
 
 				ready = ++playerAmount == 2;

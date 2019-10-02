@@ -4,7 +4,7 @@ namespace WebSocketTest.Datatypes
 {
 	class Ball : GameObject
 	{
-		public Ball(IVector2d pos, IVector2d dim, IVector2d vel) : base(pos, dim, vel) { }
+		public Ball(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
 
 		public Ball(IPhysicsData phys) : base(phys) { }
 

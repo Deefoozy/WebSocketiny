@@ -13,7 +13,7 @@ namespace WebSocketTest.Datatypes
 
 		public Client ClientInfo { get; private set; }
 
-		public Player(IVector2d pos, IVector2d dim, IVector2d vel) : base(pos, dim, vel) { }
+		public Player(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
 
 		public Player(IPhysicsData phys) : base(phys) { }
 
