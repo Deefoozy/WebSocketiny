@@ -14,7 +14,7 @@ namespace WebSocketTest.Responses
 		/// </summary>
 		/// <param name="clientRequest"></param>
 		/// <returns></returns>
-		public static byte[] GenerateHandshake(string clientRequest)
+		public static string GenerateHandshake(string clientRequest)
 		{
 			// Get position of the websocket key, then retrieve that key and add the server key to that.
 			int secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
@@ -29,13 +29,11 @@ namespace WebSocketTest.Responses
 				)
 			);
 
-			return Encoding.UTF8.GetBytes(
-				$"HTTP/1.1 101 Switching Protocols{eol}"
+			return $"HTTP/1.1 101 Switching Protocols{eol}"
 				+ $"Connection: Upgrade{eol}"
 				+ $"Upgrade: websocket{eol}"
 				+ $"Sec-WebSocket-Accept: {responseKeyHash}{eol}"
-				+ eol
-			);
+				+ eol;
 		}
 	}
 }

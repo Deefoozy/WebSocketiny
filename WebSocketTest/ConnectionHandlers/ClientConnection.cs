@@ -40,7 +40,7 @@ namespace WebSocketTest.ConnectionHandlers
 			{
 				try
 				{
-                    MessageSender.SendToSpecific(data, clientData);
+                    MessageSender.SendToSpecific(Handshake.GenerateHandshake(data), clientData);
 				}
 				catch (Exception exep)
 				{
