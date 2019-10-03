@@ -23,49 +23,74 @@ namespace WebSocketTest.ConnectionHandlers
 				activeGames.Add(new Game(gameId++));
 		}
 
+		/// <summary>
+		/// Accept a new client, by handshaking and starting to wait for messages
+		/// </summary>
+		/// <param name="clientData"></param>
 		public void Accept(Client clientData)
 		{
+			// Wait untill part of the initial connection message has been received
 			while (clientData.client.Available < Encoding.UTF8.GetByteCount("GET"))
 				Thread.Sleep(1);
 
 			string data = Encoding.UTF8.GetString(ReadStream(clientData, true));
 
-
+			// Check if http request
 			if (data.StartsWith("GET"))
 			{
-				SendHandshake(clientData, Handshake.GenerateHandshake(data));
+				try
+				{
+					SendHandshake(clientData, Handshake.GenerateHandshake(data));
+				}
+				catch (Exception exep)
+				{
+					Console.WriteLine($"{clientData.id} | Could not accept client connection | {exep}");
+				}
+			}
+			else
+			{
+				Console.WriteLine($"{clientData.id} | Could not accept client connection");
+				return;
 			}
 
+			// Add client to active clients and assign that client to a game
 			activeClients.Add(clientData);
-
 			AssignToGame(clientData, activeGames);
 
+			// Start waiting for messages, does not return untill client disconnects
 			WaitForMessage(clientData);
 
+			// End connection with client
 			clientData.client.GetStream().Close();
-
 			Console.WriteLine($"{clientData.id} | Closed client connection");
 		}
 
+		/// <summary>
+		/// Starts waiting for message, returns void when client disconnects or connection has to be closed
+		/// </summary>
+		/// <param name="clientData"></param>
 		private void WaitForMessage(Client clientData)
 		{
 			bool open = true;
 
 			while (open)
 			{
+				// Close connection if the client disconnected
 				if (!clientData.client.Connected)
 					return;
 
-				// Put thread in low priority pool if no data is available
+				// Wait untill message data is available
 				while (!clientData.client.GetStream().DataAvailable)
 				{
 					// Check if client is still connected
 					if (clientData.client.Client.Poll(10, SelectMode.SelectRead))
 					{
+						// Remove the client and end WaitForMessage
 						RemoveClient(clientData.id);
-						break;
+						return;
 					}
 
+					// Put thread in low priority pool if no data is available
 					Thread.Sleep(1);
 				}
 
@@ -94,11 +119,22 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 		}
 
+		/// <summary>
+		/// Sends handshake to specified client
+		/// </summary>
+		/// <param name="clientData"></param>
+		/// <param name="handshake"></param>
 		private void SendHandshake(Client clientData, byte[] handshake)
 		{
 			clientData.client.GetStream().Write(handshake, 0, handshake.Length);
 		}
 
+		/// <summary>
+		/// Reads stream of specified user and returns the message bytes
+		/// </summary>
+		/// <param name="clientData"></param>
+		/// <param name="initial"></param>
+		/// <returns></returns>
 		private byte[] ReadStream(Client clientData, bool initial = false)
 		{
 			byte[] bytes = new byte[initial ? clientData.client.Available : 1024];
@@ -106,6 +142,10 @@ namespace WebSocketTest.ConnectionHandlers
 			return bytes;
 		}
 
+		/// <summary>
+		/// Removes client from activeClients by id
+		/// </summary>
+		/// <param name="id"></param>
 		private void RemoveClient(int id)
 		{
 			for (int i = 0; i < activeClients.Count; i++)
@@ -116,6 +156,11 @@ namespace WebSocketTest.ConnectionHandlers
 				}
 		}
 
+		/// <summary>
+		/// Assigns specified client to a Game in the gamePool
+		/// </summary>
+		/// <param name="passedClient"></param>
+		/// <param name="gamePool"></param>
 		private void AssignToGame(Client passedClient, List<Game> gamePool)
 		{
 			for (int i = 0; i < gamePool.Count; i++)
@@ -128,6 +173,9 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 		}
 
+		/// <summary>
+		/// Updates gamelist
+		/// </summary>
 		private void UpdateGameList()
 		{
 			// Faulty logic | fix later
