@@ -16,15 +16,16 @@ namespace WebSocketTest.Responses
 			string responseKey = receivedKey + SERVER_KEY;
 
 			const string eol = "\r\n";
+			string responseKeyHash = Convert.ToBase64String(
+				SHA1.Create().ComputeHash(
+					Encoding.UTF8.GetBytes(responseKey)
+				)
+			);
 			return Encoding.UTF8.GetBytes(
-				"HTTP/1.1 101 Switching Protocols" + eol
-				+ "Connection: Upgrade" + eol
-				+ "Upgrade: websocket" + eol
-				+ "Sec-WebSocket-Accept: " + Convert.ToBase64String(
-					SHA1.Create().ComputeHash(
-						Encoding.UTF8.GetBytes(responseKey)
-					)
-				) + eol
+				$"HTTP/1.1 101 Switching Protocols{eol}"
+				+ $"Connection: Upgrade{eol}"
+				+ $"Upgrade: websocket{eol}"
+				+ $"Sec-WebSocket-Accept: {responseKeyHash}{eol}"
 				+ eol
 			);
 		}
