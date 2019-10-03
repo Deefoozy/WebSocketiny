@@ -7,6 +7,11 @@ namespace WebSocketTest.ResponseHandlers
 {
 	static class MessageSender
 	{
+		/// <summary>
+		/// Send message to all specified clients
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="targetClients"></param>
 		static public void SendToAll(string message, List<Client> targetClients)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
@@ -21,6 +26,11 @@ namespace WebSocketTest.ResponseHandlers
 				}
 		}
 
+		/// <summary>
+		/// Send message to all specified clients
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="targetClients"></param>
 		static public void SendToAll(string message, Player[] targetClients)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
@@ -36,6 +46,12 @@ namespace WebSocketTest.ResponseHandlers
 				}
 		}
 
+		/// <summary>
+		/// Send message to client if that client exists within the targetClients
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="targetClients"></param>
+		/// <param name="id"></param>
 		static public void SendToSpecific(string message, List<Client> targetClients, int id)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
@@ -48,6 +64,11 @@ namespace WebSocketTest.ResponseHandlers
 				}
 		}
 
+		/// <summary>
+		/// Send message to a specific client
+		/// </summary>
+		/// <param name="message"></param>
+		/// <param name="targetClient"></param>
 		static public void SendToSpecific(string message, Client targetClient)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);

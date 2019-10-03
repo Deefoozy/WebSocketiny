@@ -17,6 +17,11 @@ namespace WebSocketTest.Datatypes
 
 		public Player(IPhysicsData phys) : base(phys) { }
 
+		/// <summary>
+		/// Binds client to player
+		/// </summary>
+		/// <param name="passedClient"></param>
+		/// <param name="passedPlayerNumber"></param>
 		public void BindPlayer(Client passedClient, int passedPlayerNumber)
 		{
 			ClientInfo = passedClient;
@@ -27,16 +32,26 @@ namespace WebSocketTest.Datatypes
 			);
 		}
 
+		/// <summary>
+		/// Moves player to the left
+		/// </summary>
 		public void MoveLeft()
 		{
 			Position.X -= _speed;
 		}
 
+		/// <summary>
+		/// Moves player to the right
+		/// </summary>
 		public void MoveRight()
 		{
 			Position.X += _speed;
 		}
 
+		/// <summary>
+		/// Gets player score
+		/// </summary>
+		/// <returns></returns>
 		public int GetScore()
 		{
 			return _score;

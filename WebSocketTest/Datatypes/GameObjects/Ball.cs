@@ -8,6 +8,10 @@ namespace WebSocketTest.Datatypes
 
 		public Ball(IPhysicsData phys) : base(phys) { }
 
+		/// <summary>
+		/// Reverse the X velocity
+		/// </summary>
+		/// <param name="offset"></param>
 		public void BounceX(double offset)
 		{
 			Console.WriteLine(offset.ToString());
@@ -17,11 +21,18 @@ namespace WebSocketTest.Datatypes
 				Velocity.IncreaseMultiplier();
 		}
 
+		/// <summary>
+		/// Reverse the Y velocity
+		/// </summary>
 		public void BounceY()
 		{
 			Velocity.Y -= Velocity.Y * 2;
 		}
 
+		/// <summary>
+		/// Updates Position
+		/// </summary>
+		/// <returns></returns>
 		public Position2d Move()
 		{
 			Position.X += (int)(Velocity.X * Velocity.SpeedMultiplier);

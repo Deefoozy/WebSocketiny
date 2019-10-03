@@ -20,6 +20,11 @@ namespace WebSocketTest.Datatypes
 			id = passedId;
 		}
 
+		/// <summary>
+		/// Adds player to game when the game has not started yet and checks if the game can be started
+		/// </summary>
+		/// <param name="targetClient"></param>
+		/// <returns></returns>
 		public bool AddPlayer(Client targetClient)
 		{
 			if (!ready)
@@ -29,14 +34,15 @@ namespace WebSocketTest.Datatypes
 
 				ready = ++playerAmount == 2;
 				if (ready)
-				{
 					StartGame();
-				}
 			}
 
 			return !ready;
 		}
 
+		/// <summary>
+		/// Starts game
+		/// </summary>
 		public void StartGame()
 		{
 			MessageSender.SendToAll("pre game", players);
