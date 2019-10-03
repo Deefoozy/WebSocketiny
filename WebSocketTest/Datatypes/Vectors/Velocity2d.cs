@@ -13,6 +13,9 @@ namespace WebSocketTest.Datatypes
 
 		public Velocity2d(int x, int y) : base(x, y) { }
 
+		/// <summary>
+		/// Increases the speed multiplier by 0.1
+		/// </summary>
 		public void IncreaseMultiplier()
 		{
 			SpeedMultiplier += 0.1;

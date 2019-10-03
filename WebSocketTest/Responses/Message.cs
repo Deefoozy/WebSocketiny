@@ -7,34 +7,42 @@ namespace WebSocketTest.Responses
 {
 	class Message
 	{
+		/// <summary>
+		/// Generates message that can be sent to a client
+		/// </summary>
+		/// <param name="message"></param>
+		/// <returns></returns>
 		static public byte[] GenerateMessage(string message)
 		{
 			using (MemoryStream memoryStream = new MemoryStream())
 			{
+				byte messageLength;
+				byte opCode;
+				byte[] buffer;
+				byte[] payload;
+
 				// opCode = content type
 				// FirstByte bits: 1 0 0 0 0 0 0 1
 				// FirstByte bit 1: continuation. 1 if last message
 				// FirstByte bit 2/4: reserved
 				// FirstByte bit 5/8: opCode
-				byte opCode = 129;
+				opCode = 129;
 				memoryStream.WriteByte(opCode);
 
-				// Console.WriteLine("10000001");
-				// Console.WriteLine(Convert.ToString(opCode, 2).PadLeft(8, '0'));
+				// Get byte of the message that has to be sents
+				payload = Encoding.UTF8.GetBytes(message);
 
-				byte[] payload = Encoding.UTF8.GetBytes(message);
-
-				byte messageLength;
-				byte[] buffer;
-
+				// Check the payload length to determine size and what bytes should be used to determine length
 				if (payload.Length < 126)
 				{
+					// Assign payload.length to messageLength
 					messageLength = (byte)(payload.Length);
 
 					memoryStream.WriteByte(messageLength);
 				}
 				else if (payload.Length <= 65535)
 				{
+					// Assign a bytevalue of 126 to messageLength and use the 2 following bytes to designate message length
 					messageLength = (byte)126;
 
 					memoryStream.WriteByte(messageLength);
@@ -48,6 +56,7 @@ namespace WebSocketTest.Responses
 				}
 				else
 				{
+					// Assign a bytevalue of 127 to messageLength and use the 4 following bytes to designate message length
 					messageLength = (byte)127;
 
 					memoryStream.WriteByte(messageLength);
@@ -60,8 +69,10 @@ namespace WebSocketTest.Responses
 					memoryStream.Write(buffer, 0, buffer.Length);
 				}
 
+				// Write payload
 				memoryStream.Write(payload, 0, payload.Length);
 
+				// Return array with message as array
 				return memoryStream.ToArray();
 			}
 		}
