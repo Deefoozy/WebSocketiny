@@ -40,7 +40,7 @@ namespace WebSocketTest.ConnectionHandlers
 			{
 				try
 				{
-					SendHandshake(clientData, Handshake.GenerateHandshake(data));
+                    MessageSender.SendToSpecific(Handshake.GenerateHandshake(data), clientData);
 				}
 				catch (Exception exep)
 				{
@@ -117,16 +117,6 @@ namespace WebSocketTest.ConnectionHandlers
 				// messageAmount++;
 				// open = messageAmount < 50;
 			}
-		}
-
-		/// <summary>
-		/// Sends handshake to specified client
-		/// </summary>
-		/// <param name="clientData"></param>
-		/// <param name="handshake"></param>
-		private void SendHandshake(Client clientData, byte[] handshake)
-		{
-			clientData.client.GetStream().Write(handshake, 0, handshake.Length);
 		}
 
 		/// <summary>
