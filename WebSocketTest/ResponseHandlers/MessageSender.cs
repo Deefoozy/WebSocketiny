@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
@@ -69,9 +70,9 @@ namespace WebSocketTest.ResponseHandlers
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>
-		static public void SendToSpecific(string message, Client targetClient)
+		static public void SendToSpecific(string message, Client targetClient, bool handshake = false)
 		{
-			byte[] byteMessage = Message.GenerateMessage(message);
+			byte[] byteMessage = !handshake ? Message.GenerateMessage(message) : Encoding.UTF8.GetBytes(message);
 
 			targetClient.client.GetStream().Write(byteMessage);
 		}
