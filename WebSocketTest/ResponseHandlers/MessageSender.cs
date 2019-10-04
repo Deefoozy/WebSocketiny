@@ -66,7 +66,7 @@ namespace WebSocketTest.ResponseHandlers
 		}
 
 		/// <summary>
-		/// Send message to a specific client
+		/// Send message to the given client
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>
