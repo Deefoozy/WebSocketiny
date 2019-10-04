@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
+using System.Linq;
 using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
@@ -13,8 +14,8 @@ namespace WebSocketTest.ConnectionHandlers
 {
 	class ClientConnection
 	{
-		public List<Client> activeClients = new List<Client>();
-		public List<Game> activeGames = new List<Game>();
+		private readonly Dictionary<int, Client> activeClients = new Dictionary<int, Client>();
+		private readonly List<Game> activeGames = new List<Game>();
 		private int gameId = 0;
 
 		public ClientConnection()
@@ -54,7 +55,7 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 
 			// Add client to active clients and assign that client to a game
-			activeClients.Add(clientData);
+			activeClients.Add(clientData.id, clientData);
 			AssignToGame(clientData, activeGames);
 
 			// Start waiting for messages, does not return untill client disconnects
@@ -102,7 +103,7 @@ namespace WebSocketTest.ConnectionHandlers
 					break;
 				}
 
-				MessageSender.SendToAll("a", activeClients);
+				MessageSender.SendToAll("a", activeClients.Values.ToList());
 
 				// DO WHATEVS
 
@@ -138,12 +139,7 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <param name="id"></param>
 		private void RemoveClient(int id)
 		{
-			for (int i = 0; i < activeClients.Count; i++)
-				if (activeClients[i].id == id)
-				{
-					activeClients.RemoveAt(i);
-					break;
-				}
+			activeClients.Remove(id);
 		}
 
 		/// <summary>
