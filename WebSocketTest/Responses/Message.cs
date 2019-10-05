@@ -13,7 +13,7 @@ namespace WebSocketTest.Responses
 		/// <returns></returns>
 		static public byte[] GenerateMessage(string message)
 		{
-			using (var memoryStream = new MemoryStream())
+			using (MemoryStream memoryStream = new MemoryStream())
 			{
 				byte messageLength;
 				byte opCode;

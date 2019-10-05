@@ -49,7 +49,7 @@ namespace WebSocketTest.Datatypes
 
 			if (ready)
 			{
-				var framecounter = 0;
+				int framecounter = 0;
 				while (ready)
 				{
 					Thread.Sleep(33);

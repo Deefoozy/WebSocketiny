@@ -13,10 +13,10 @@ namespace WebSocketTest.Decoders
 		public static ReceivedMessage DecodeMessage(byte[] message)
 		{
 			// Determine the length of the message
-			var secondByte = message[1];
-			var dataLength = secondByte & 127;
+			byte secondByte = message[1];
+			int dataLength = secondByte & 127;
 			// Points to the index of the first masking byte in the message
-			var indexFirstMask = 2;
+			int indexFirstMask = 2;
 
 			// Determine indexFirstMask by looking at the payload length. if the message is empty, create a closing receivedMessage
 			if (dataLength == 126)
@@ -27,11 +27,11 @@ namespace WebSocketTest.Decoders
 				return new ReceivedMessage("", true);
 
 			// Get the 4 masking bytes
-			var keys = message.Skip(indexFirstMask).Take(4);
-			var indexFirstDataByte = indexFirstMask + 4;
+			IEnumerable<byte> keys = message.Skip(indexFirstMask).Take(4);
+			int indexFirstDataByte = indexFirstMask + 4;
 
 			// Create decoded byte array to store the decoded message
-			var decoded = new byte[message.Length - indexFirstDataByte];
+			byte[] decoded = new byte[message.Length - indexFirstDataByte];
 
 			// Decode the message
 			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < (dataLength + indexFirstDataByte); encodedIndex++, decodedIndex++)
