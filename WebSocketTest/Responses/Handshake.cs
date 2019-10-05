@@ -17,13 +17,13 @@ namespace WebSocketTest.Responses
 		public static string GenerateHandshake(string clientRequest)
 		{
 			// Get position of the websocket key, then retrieve that key and add the server key to that.
-			int secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
-			string receivedKey = clientRequest.Substring(secWebSocketKeyPosition, 24);
-			string responseKey = receivedKey + SERVER_KEY;
+			var secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
+			var receivedKey = clientRequest.Substring(secWebSocketKeyPosition, 24);
+			var responseKey = receivedKey + SERVER_KEY;
 
 			// Define end of line
 			const string eol = "\r\n";
-			string responseKeyHash = Convert.ToBase64String(
+			var responseKeyHash = Convert.ToBase64String(
 				SHA1.Create().ComputeHash(
 					Encoding.UTF8.GetBytes(responseKey)
 				)

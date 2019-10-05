@@ -19,7 +19,7 @@ namespace WebSocketTest.ConnectionHandlers
 
 		public ClientConnection()
 		{
-			for (int i = 0; i < 5; i++)
+			for (var i = 0; i < 5; i++)
 				activeGames.Add(new Game(gameId++));
 		}
 
@@ -33,7 +33,7 @@ namespace WebSocketTest.ConnectionHandlers
 			while (clientData.client.Available < Encoding.UTF8.GetByteCount("GET"))
 				Thread.Sleep(1);
 
-			string data = Encoding.UTF8.GetString(ReadStream(clientData, true));
+			var data = Encoding.UTF8.GetString(ReadStream(clientData, true));
 
 			// Check if http request
 			if (data.StartsWith("GET"))
@@ -71,7 +71,7 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <param name="clientData"></param>
 		private void WaitForMessage(Client clientData)
 		{
-			bool open = true;
+			var open = true;
 
 			while (open)
 			{
@@ -94,7 +94,7 @@ namespace WebSocketTest.ConnectionHandlers
 					Thread.Sleep(1);
 				}
 
-				ReceivedMessage incomingMessage = MessageDecoder.DecodeMessage(ReadStream(clientData));
+				var incomingMessage = MessageDecoder.DecodeMessage(ReadStream(clientData));
 
 				if (incomingMessage.close)
 				{
@@ -127,7 +127,7 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <returns></returns>
 		private byte[] ReadStream(Client clientData, bool initial = false)
 		{
-			byte[] bytes = new byte[initial ? clientData.client.Available : 1024];
+			var bytes = new byte[initial ? clientData.client.Available : 1024];
 			clientData.client.GetStream().Read(bytes, 0, bytes.Length);
 			return bytes;
 		}
@@ -148,7 +148,7 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <param name="gamePool"></param>
 		private void AssignToGame(Client passedClient, List<Game> gamePool)
 		{
-			for (int i = 0; i < gamePool.Count; i++)
+			for (var i = 0; i < gamePool.Count; i++)
 			{
 				if (gamePool[i].playerAmount < 2)
 				{
@@ -170,7 +170,7 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 			else
 			{
-				for (int i = 0; i < activeGames.Count; i++)
+				for (var i = 0; i < activeGames.Count; i++)
 				{
 					if (activeGames[i].playerAmount == 0 && activeGames.Count > 2)
 					{

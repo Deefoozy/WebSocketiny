@@ -21,10 +21,10 @@ namespace WebSocketTest.Programs
 		{
 			Console.WriteLine("Setting up clientConnection handler");
 			// Set up the clientConnection connectionHandler to be able to accept clients on multiple threads
-			ClientConnection clientConnection = new ClientConnection();
+			var clientConnection = new ClientConnection();
 
 			// Setup server and start listening for connections
-			TcpListener server = new TcpListener(endpoint);
+			var server = new TcpListener(endpoint);
 			server.Start();
 
 			Console.WriteLine($"Listener set up and listening on {endpoint}");
@@ -34,14 +34,14 @@ namespace WebSocketTest.Programs
 			while (_isAccepting)
 			{
 				// Wait untill a client connects
-				TcpClient client = server.AcceptTcpClient();
+				var client = server.AcceptTcpClient();
 
-				Client temporaryClient = new Client(connectionAmount, client);
+				var temporaryClient = new Client(connectionAmount, client);
 
 				Console.WriteLine($"Client | {connectionAmount}");
 
 				// Start a new thread with the client and start that thread
-				Thread newThread = new Thread(() =>
+				var newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
 				});
