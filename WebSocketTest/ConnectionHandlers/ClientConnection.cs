@@ -8,7 +8,6 @@ using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
 using WebSocketTest.ResponseHandlers;
-using Newtonsoft.Json;
 
 namespace WebSocketTest.ConnectionHandlers
 {

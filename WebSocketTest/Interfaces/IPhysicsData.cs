@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Datatypes
 {
 	/// <summary>
 	/// A collection of 2d vectors and information relating to physics

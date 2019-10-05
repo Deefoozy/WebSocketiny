@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using WebSocketTest.Datatypes.Vectors;
+﻿using System.Threading;
 using WebSocketTest.ResponseHandlers;
 
 namespace WebSocketTest.Datatypes

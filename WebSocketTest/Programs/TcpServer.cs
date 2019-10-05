@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using System.Collections.Generic;
 using WebSocketTest.ConnectionHandlers;
 using WebSocketTest.Datatypes;
 
