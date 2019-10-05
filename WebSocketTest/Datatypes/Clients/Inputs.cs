@@ -2,8 +2,8 @@
 {
 	class Inputs
 	{
-		private bool leftInput = false;
-		private bool rightInput = false;
+		private bool leftInput;
+		private bool rightInput;
 
 		public void ApplyInputs(byte left, byte right)
 		{
