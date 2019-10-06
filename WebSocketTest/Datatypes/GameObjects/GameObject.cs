@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WebSocketTest.Datatypes;
-
-namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Datatypes
 {
 	class GameObject : IPhysicsData
 	{

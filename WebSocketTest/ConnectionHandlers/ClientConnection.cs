@@ -8,7 +8,6 @@ using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
 using WebSocketTest.ResponseHandlers;
-using Newtonsoft.Json;
 
 namespace WebSocketTest.ConnectionHandlers
 {
@@ -16,7 +15,7 @@ namespace WebSocketTest.ConnectionHandlers
 	{
 		private readonly Dictionary<int, Client> activeClients = new Dictionary<int, Client>();
 		private readonly List<Game> activeGames = new List<Game>();
-		private int gameId = 0;
+		private int gameId;
 
 		public ClientConnection()
 		{

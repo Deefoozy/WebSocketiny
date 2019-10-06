@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using WebSocketTest.Datatypes.Vectors;
+﻿using System.Threading;
 using WebSocketTest.ResponseHandlers;
 
 namespace WebSocketTest.Datatypes
@@ -10,8 +8,8 @@ namespace WebSocketTest.Datatypes
 		public readonly int id;
 		public readonly Player[] players = new Player[2];
 		// public List<Client> spectators;
-		public int playerAmount = 0;
-		public bool ready = false;
+		public int playerAmount;
+		public bool ready;
 
 		private Ball ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
 

@@ -23,7 +23,7 @@ namespace WebSocketTest.ResponseHandlers
 				}
 				catch
 				{
-					Console.WriteLine($"Error sending to| {i} | {targetClients[i].ToString()}");
+					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}");
 				}
 		}
 
@@ -43,7 +43,7 @@ namespace WebSocketTest.ResponseHandlers
 				}
 				catch
 				{
-					Console.WriteLine($"Error sending to| {i} | {targetClients[i].ToString()}");
+					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}");
 				}
 		}
 

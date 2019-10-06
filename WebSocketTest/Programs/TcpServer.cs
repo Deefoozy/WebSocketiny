@@ -2,7 +2,6 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using System.Collections.Generic;
 using WebSocketTest.ConnectionHandlers;
 using WebSocketTest.Datatypes;
 
@@ -13,7 +12,7 @@ namespace WebSocketTest.Programs
 		static private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
 
 		static private bool _isAccepting = true;
-		static public int connectionAmount = 0;
+		static public int connectionAmount;
 
 		/// <summary>
 		/// Method that initiates the websocket server
