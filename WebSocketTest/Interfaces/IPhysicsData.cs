@@ -1,4 +1,6 @@
-﻿namespace WebSocketTest.Datatypes
+﻿using WebSocketTest.Models.Vectors;
+
+namespace WebSocketTest.Interfaces
 {
 	/// <summary>
 	/// A collection of 2d vectors and information relating to physics

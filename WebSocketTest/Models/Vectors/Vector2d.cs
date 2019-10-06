@@ -1,6 +1,8 @@
-﻿namespace WebSocketTest.Datatypes.Vectors
+﻿using WebSocketTest.Interfaces;
+
+namespace WebSocketTest.Models.Vectors
 {
-	class Vector2d : IVector2d
+    internal class Vector2d : IVector2d
 	{
 		public int X { get; set; }
 		public int Y { get; set; }

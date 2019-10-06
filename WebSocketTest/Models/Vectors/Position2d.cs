@@ -1,8 +1,6 @@
-﻿using WebSocketTest.Datatypes.Vectors;
-
-namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Models.Vectors
 {
-	class Position2d : Vector2d
+    internal class Position2d : Vector2d
 	{
 		public Position2d(int x, int y) : base(x, y) { }
 

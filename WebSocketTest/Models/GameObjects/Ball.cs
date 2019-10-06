@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Globalization;
+using WebSocketTest.Interfaces;
+using WebSocketTest.Models.Vectors;
 
-namespace WebSocketTest.Datatypes
+namespace WebSocketTest.Models.GameObjects
 {
 	class Ball : GameObject
 	{
@@ -14,7 +17,7 @@ namespace WebSocketTest.Datatypes
 		/// <param name="offset"></param>
 		public void BounceX(double offset)
 		{
-			Console.WriteLine(offset.ToString());
+			Console.WriteLine(offset.ToString(CultureInfo.CurrentCulture));
 			Velocity.X -= Velocity.X * 2;
 
 			if (Velocity.Speed < MaxSpeed)

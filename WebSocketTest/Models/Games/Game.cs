@@ -1,17 +1,20 @@
 ﻿using System.Threading;
+using WebSocketTest.Models.Clients;
+using WebSocketTest.Models.GameObjects;
+using WebSocketTest.Models.Vectors;
 using WebSocketTest.ResponseHandlers;
 
-namespace WebSocketTest.Datatypes
+namespace WebSocketTest.Models.Games
 {
 	class Game
 	{
 		public readonly int id;
 		public readonly Player[] players = new Player[2];
 		// public List<Client> spectators;
-		public int playerAmount;
-		public bool ready;
+		public int PlayerAmount;
+		public bool IsReady;
 
-		private Ball ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
+		private Ball _ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
 
 		public Game(int passedId)
 		{
@@ -25,17 +28,17 @@ namespace WebSocketTest.Datatypes
 		/// <returns></returns>
 		public bool AddPlayer(Client targetClient)
 		{
-			if (!ready)
+			if (!IsReady)
 			{
-				players[playerAmount] = new Player(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
-				players[playerAmount].BindPlayer(targetClient, playerAmount);
+				players[PlayerAmount] = new Player(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
+				players[PlayerAmount].BindPlayer(targetClient, PlayerAmount);
 
-				ready = ++playerAmount == 2;
-				if (ready)
+				IsReady = ++PlayerAmount == 2;
+				if (IsReady)
 					StartGame();
 			}
 
-			return !ready;
+			return !IsReady;
 		}
 
 		/// <summary>
@@ -47,16 +50,16 @@ namespace WebSocketTest.Datatypes
 
 			Thread.Sleep(1000);
 
-			if (ready)
+			if (IsReady)
 			{
-				int framecounter = 0;
-				while (ready)
+				var framecounter = 0;
+				while (IsReady)
 				{
 					Thread.Sleep(33);
 					MessageSender.SendToAll("frame 1", players);
 					// Start game logic
 					if (framecounter++ == 60)
-						ready = false;
+						IsReady = false;
 				}
 			}
 

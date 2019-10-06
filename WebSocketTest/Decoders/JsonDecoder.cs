@@ -1,10 +1,10 @@
-﻿using WebSocketTest.Datatypes;
+﻿using WebSocketTest.Models.Clients;
 
 namespace WebSocketTest.Decoders
 {
-	static class JsonDecoder
+    internal static class JsonDecoder
 	{
-		static public Inputs ParseToInputs(Inputs target)
+		public static Inputs ParseToInputs(Inputs target)
 		{
 			return new Inputs();
 		}

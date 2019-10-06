@@ -1,4 +1,4 @@
-﻿namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Interfaces
 {
 	/// <summary>
 	/// A 2 dimensional vector

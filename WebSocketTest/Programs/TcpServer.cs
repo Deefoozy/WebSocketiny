@@ -3,16 +3,16 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using WebSocketTest.ConnectionHandlers;
-using WebSocketTest.Datatypes;
+using WebSocketTest.Models.Clients;
 
 namespace WebSocketTest.Programs
 {
-	static class TcpServer
+    internal static class TcpServer
 	{
-		static private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
+		private static readonly IPEndPoint Endpoint = new IPEndPoint(IPAddress.Any, 8079); // TODO: auto free port finder 
 
-		static private bool _isAccepting = true;
-		static public int connectionAmount;
+		private static bool _isAccepting = true; //Im' not sure that should work in this way?
+		public static int ConnectionAmount;
 
 		/// <summary>
 		/// Method that initiates the websocket server
@@ -21,33 +21,33 @@ namespace WebSocketTest.Programs
 		{
 			Console.WriteLine("Setting up clientConnection handler");
 			// Set up the clientConnection connectionHandler to be able to accept clients on multiple threads
-			ClientConnection clientConnection = new ClientConnection();
+			var clientConnection = new ClientConnection();
 
 			// Setup server and start listening for connections
-			TcpListener server = new TcpListener(endpoint);
+			var server = new TcpListener(Endpoint);
 			server.Start();
 
-			Console.WriteLine($"Listener set up and listening on {endpoint}");
+			Console.WriteLine($"Listener set up and listening on {Endpoint}");
 			Console.WriteLine("Waiting for clients");
 
-			// Loop that keeps accepting users and creates clients within the clientConnection untill the _isAccepting is set to false.
+			// Loop that keeps accepting users and creates clients within the clientConnection until the _isAccepting is set to false.
 			while (_isAccepting)
 			{
-				// Wait untill a client connects
-				TcpClient client = server.AcceptTcpClient();
+				// Wait until a ClientTcp connects
+				var client = server.AcceptTcpClient();
 
-				Client temporaryClient = new Client(connectionAmount, client);
+				var temporaryClient = new Client(ConnectionAmount, client);
 
-				Console.WriteLine($"Client | {connectionAmount}");
+				Console.WriteLine($"Client | {ConnectionAmount}");
 
-				// Start a new thread with the client and start that thread
-				Thread newThread = new Thread(() =>
+				// Start a new thread with the ClientTcp and start that thread
+				var newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
 				});
 				newThread.Start();
 
-				connectionAmount++;
+				ConnectionAmount++;
 
 				// Instantly close to keep flow simple
 				// _isAccepting = false;
