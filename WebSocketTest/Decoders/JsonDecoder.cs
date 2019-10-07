@@ -1,6 +1,5 @@
 ﻿using WebSocketTest.Datatypes;
 using System.Text.Json;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace WebSocketTest.Decoders
@@ -12,7 +11,7 @@ namespace WebSocketTest.Decoders
 			return new Inputs();
 		}
 
-		static public IDictionary JsonToDictionary(string json)
+		static public Dictionary<string, string> JsonToDictionary(string json)
 		{
 			var options = new JsonSerializerOptions { AllowTrailingCommas = true };
 			return JsonSerializer.Deserialize<Dictionary<string, string>>(json, options);
