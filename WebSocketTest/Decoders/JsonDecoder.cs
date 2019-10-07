@@ -1,6 +1,6 @@
 ﻿using WebSocketTest.Datatypes;
 using System.Text.Json;
-//using Newtonsoft.Json;
+
 
 
 namespace WebSocketTest.Decoders
@@ -9,9 +9,9 @@ namespace WebSocketTest.Decoders
 	{
 		static public Inputs ParseToInputs(Inputs target)
 		{
-            string json = JsonSerializer.Serialize(target);
-            var convertedObject = JsonSerializer.Deserialize<Inputs>(json); // Converts json string to Inputs object 
-            return convertedObject;
+                string json = JsonSerializer.Serialize(target);
+                // Converts and returns json string to Inputs object
+                return JsonSerializer.Deserialize<Inputs>(json); 
 		}
 	}
 }
