@@ -13,7 +13,7 @@ namespace WebSocketTest.ResponseHandlers
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
-		static public void SendToAll(string message, List<Client> targetClients)
+		public static void SendToAll(string message, List<Client> targetClients)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
 			for (int i = 0; i < targetClients.Count; i++)
@@ -32,7 +32,7 @@ namespace WebSocketTest.ResponseHandlers
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
-		static public void SendToAll(string message, Player[] targetClients)
+		public static void SendToAll(string message, Player[] targetClients)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
 
@@ -53,7 +53,7 @@ namespace WebSocketTest.ResponseHandlers
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
 		/// <param name="id"></param>
-		static public void SendToSpecific(string message, List<Client> targetClients, int id)
+		public static void SendToSpecific(string message, List<Client> targetClients, int id)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
 
@@ -70,7 +70,7 @@ namespace WebSocketTest.ResponseHandlers
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>
-		static public void SendToSpecific(string message, Client targetClient, bool handshake = false)
+		public static void SendToSpecific(string message, Client targetClient, bool handshake = false)
 		{
 			byte[] byteMessage = !handshake ? Message.GenerateMessage(message) : Encoding.UTF8.GetBytes(message);
 

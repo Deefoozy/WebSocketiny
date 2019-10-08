@@ -9,10 +9,10 @@ namespace WebSocketTest.Programs
 {
 	static class TcpServer
 	{
-		static private readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
+		private static readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
 
-		static private bool _isAccepting = true;
-		static public int connectionAmount;
+		private static bool isAccepting = true;
+		public static int connectionAmount;
 
 		/// <summary>
 		/// Method that initiates the websocket server
@@ -31,7 +31,7 @@ namespace WebSocketTest.Programs
 			Console.WriteLine("Waiting for clients");
 
 			// Loop that keeps accepting users and creates clients within the clientConnection untill the _isAccepting is set to false.
-			while (_isAccepting)
+			while (isAccepting)
 			{
 				// Wait untill a client connects
 				TcpClient client = server.AcceptTcpClient();

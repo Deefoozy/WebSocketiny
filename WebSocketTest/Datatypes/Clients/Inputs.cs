@@ -2,25 +2,25 @@
 {
 	class Inputs
 	{
-		private bool leftInput;
-		private bool rightInput;
+		private bool _leftInput;
+		private bool _rightInput;
 
 		public void ApplyInputs(byte left, byte right)
 		{
 			if (left != 2)
-				leftInput = left == 1;
+				_leftInput = left == 1;
 			if (right != 2)
-				rightInput = right == 1;
+				_rightInput = right == 1;
 		}
 
 		public bool Left()
 		{
-			return leftInput;
+			return _leftInput;
 		}
 
 		public bool Right()
 		{
-			return rightInput;
+			return _rightInput;
 		}
 	}
 }
