@@ -11,7 +11,7 @@ namespace WebSocketTest.Datatypes
 		public int playerAmount;
 		public bool ready;
 
-		private Ball ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
+		private Ball _ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
 
 		public Game(int passedId)
 		{

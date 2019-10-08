@@ -35,7 +35,7 @@ namespace WebSocketTest.Decoders
 			byte[] decoded = new byte[message.Length - indexFirstDataByte];
 
 			// Decode the message
-			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < (dataLength + indexFirstDataByte); encodedIndex++, decodedIndex++)
+			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < dataLength + indexFirstDataByte; encodedIndex++, decodedIndex++)
 				decoded[decodedIndex] = (byte)(message[encodedIndex] ^ keys.ElementAt(decodedIndex % 4));
 
 			// Return decoded message

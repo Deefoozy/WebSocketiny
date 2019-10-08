@@ -13,14 +13,14 @@ namespace WebSocketTest.ConnectionHandlers
 {
 	class ClientConnection
 	{
-		private readonly Dictionary<int, Client> activeClients = new Dictionary<int, Client>();
-		private readonly List<Game> activeGames = new List<Game>();
-		private int gameId;
+		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
+		private readonly List<Game> _activeGames = new List<Game>();
+		private int _gameId;
 
 		public ClientConnection()
 		{
 			for (int i = 0; i < 5; i++)
-				activeGames.Add(new Game(gameId++));
+				_activeGames.Add(new Game(_gameId++));
 		}
 
 		/// <summary>
@@ -54,8 +54,8 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 
 			// Add client to active clients and assign that client to a game
-			activeClients.Add(clientData.id, clientData);
-			AssignToGame(clientData, activeGames);
+			_activeClients.Add(clientData.id, clientData);
+			AssignToGame(clientData, _activeGames);
 
 			// Start waiting for messages, does not return untill client disconnects
 			WaitForMessage(clientData);
@@ -102,7 +102,7 @@ namespace WebSocketTest.ConnectionHandlers
 					break;
 				}
 
-				MessageSender.SendToAll("a", activeClients.Values.ToList());
+				MessageSender.SendToAll("a", _activeClients.Values.ToList());
 
 				// DO WHATEVS
 
@@ -138,7 +138,7 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <param name="id"></param>
 		private void RemoveClient(int id)
 		{
-			activeClients.Remove(id);
+			_activeClients.Remove(id);
 		}
 
 		/// <summary>
@@ -164,22 +164,22 @@ namespace WebSocketTest.ConnectionHandlers
 		private void UpdateGameList()
 		{
 			// Faulty logic | fix later
-			if (activeGames.Count == 0)
+			if (_activeGames.Count == 0)
 			{
-				activeGames.Add(new Game(gameId++));
+				_activeGames.Add(new Game(_gameId++));
 			}
 			else
 			{
-				for (int i = 0; i < activeGames.Count; i++)
+				for (int i = 0; i < _activeGames.Count; i++)
 				{
-					if (activeGames[i].playerAmount == 0 && activeGames.Count > 2)
+					if (_activeGames[i].playerAmount == 0 && _activeGames.Count > 2)
 					{
-						activeGames.RemoveAt(i);
+						_activeGames.RemoveAt(i);
 						i--;
 					}
-					else if (activeGames[i].playerAmount == 2)
+					else if (_activeGames[i].playerAmount == 2)
 					{
-						activeGames.Add(new Game(gameId++));
+						_activeGames.Add(new Game(_gameId++));
 					}
 				}
 			}

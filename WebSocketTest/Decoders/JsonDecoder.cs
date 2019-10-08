@@ -4,7 +4,7 @@ namespace WebSocketTest.Decoders
 {
 	static class JsonDecoder
 	{
-		static public Inputs ParseToInputs(Inputs target)
+		public static Inputs ParseToInputs(Inputs target)
 		{
 			return new Inputs();
 		}
