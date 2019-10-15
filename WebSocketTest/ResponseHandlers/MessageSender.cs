@@ -21,9 +21,9 @@ namespace WebSocketTest.ResponseHandlers
 				{
 					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
 				}
-				catch
+				catch (Exception e)
 				{
-					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}");
+					Console.WriteLine($"Error sending to| {i} | {targetClients[i]} | because of error {e.Message}");
 				}
 		}
 
@@ -37,14 +37,16 @@ namespace WebSocketTest.ResponseHandlers
 			byte[] byteMessage = Message.GenerateMessage(message);
 
 			for (int i = 0; i < targetClients.Length; i++)
+			{
 				try
 				{
 					targetClients[i].ClientInfo.client.GetStream().Write(byteMessage, 0, byteMessage.Length);
 				}
-				catch
+				catch (Exception e)
 				{
-					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}");
+					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}  | because of error {e.Message}");
 				}
+			}
 		}
 
 		/// <summary>
