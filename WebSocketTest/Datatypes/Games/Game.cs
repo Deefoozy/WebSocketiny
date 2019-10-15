@@ -1,9 +1,12 @@
 ﻿using System.Threading;
+using WebSocketTest.Datatypes.Clients;
+using WebSocketTest.Datatypes.GameObjects;
+using WebSocketTest.Datatypes.Vectors;
 using WebSocketTest.ResponseHandlers;
 
 namespace WebSocketTest.Datatypes
 {
-	class Game
+	public class Game
 	{
 		public readonly int id;
 		public readonly Player[] players = new Player[2];

@@ -1,6 +1,9 @@
-﻿namespace WebSocketTest.Datatypes
+﻿using WebSocketTest.Datatypes.Clients;
+using WebSocketTest.Interfaces;
+
+namespace WebSocketTest.Datatypes
 {
-	class Player : GameObject
+	public class Player : GameObject
 	{
 		private int _score = 0;
 		private int _playerNumber;
@@ -9,12 +12,12 @@
 
 		public Client ClientInfo { get; private set; }
 
-		public Player(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
+		public Player(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity, 0) { }
 
-		public Player(IPhysicsData phys) : base(phys) { }
+		public Player(IPhysicsData phys) : base(phys, 0) { }
 
 		/// <summary>
-		/// Binds client to player
+		/// Binds TcpClient to player
 		/// </summary>
 		/// <param name="passedClient"></param>
 		/// <param name="passedPlayerNumber"></param>

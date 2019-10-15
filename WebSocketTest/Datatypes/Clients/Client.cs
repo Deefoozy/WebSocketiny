@@ -1,16 +1,16 @@
 ﻿using System.Net.Sockets;
 
-namespace WebSocketTest.Datatypes
+namespace WebSocketTest.Datatypes.Clients
 {
-	class Client
+	public class Client
 	{
-		public readonly int id;
-		public readonly TcpClient client;
+		public int Id { get; }
+		public TcpClient TcpClient { get; }
 
-		public Client(int passedClientId, TcpClient passedClient)
+		public Client(int passedClientId, TcpClient passedTcpClient)
 		{
-			id = passedClientId;
-			client = passedClient;
+			Id = passedClientId;
+			TcpClient = passedTcpClient;
 		}
 	}
 }

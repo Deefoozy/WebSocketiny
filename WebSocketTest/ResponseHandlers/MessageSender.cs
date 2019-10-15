@@ -3,10 +3,11 @@ using System.Text;
 using System.Collections.Generic;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
+using WebSocketTest.Datatypes.Clients;
 
 namespace WebSocketTest.ResponseHandlers
 {
-	static class MessageSender
+	public static class MessageSender
 	{
 		/// <summary>
 		/// Send message to all specified clients
@@ -19,7 +20,7 @@ namespace WebSocketTest.ResponseHandlers
 			for (int i = 0; i < targetClients.Count; i++)
 				try
 				{
-					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
+					targetClients[i].TcpClient.GetStream().Write(byteMessage, 0, byteMessage.Length);
 				}
 				catch
 				{
@@ -39,7 +40,7 @@ namespace WebSocketTest.ResponseHandlers
 			for (int i = 0; i < targetClients.Length; i++)
 				try
 				{
-					targetClients[i].ClientInfo.client.GetStream().Write(byteMessage, 0, byteMessage.Length);
+					targetClients[i].ClientInfo.TcpClient.GetStream().Write(byteMessage, 0, byteMessage.Length);
 				}
 				catch
 				{
@@ -48,7 +49,7 @@ namespace WebSocketTest.ResponseHandlers
 		}
 
 		/// <summary>
-		/// Send message to client if that client exists within the targetClients
+		/// Send message to TcpClient if that TcpClient exists within the targetClients
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
@@ -58,15 +59,15 @@ namespace WebSocketTest.ResponseHandlers
 			byte[] byteMessage = Message.GenerateMessage(message);
 
 			for (int i = 0; i < targetClients.Count; i++)
-				if (targetClients[i].id == id)
+				if (targetClients[i].Id == id)
 				{
-					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
+					targetClients[i].TcpClient.GetStream().Write(byteMessage, 0, byteMessage.Length);
 					break;
 				}
 		}
 
 		/// <summary>
-		/// Send message to the given client
+		/// Send message to the given TcpClient
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>
@@ -74,7 +75,7 @@ namespace WebSocketTest.ResponseHandlers
 		{
 			byte[] byteMessage = !handshake ? Message.GenerateMessage(message) : Encoding.UTF8.GetBytes(message);
 
-			targetClient.client.GetStream().Write(byteMessage);
+			targetClient.TcpClient.GetStream().Write(byteMessage);
 		}
 	}
 }

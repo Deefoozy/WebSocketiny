@@ -1,9 +1,9 @@
-﻿namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Interfaces
 {
 	/// <summary>
 	/// A 2 dimensional vector
 	/// </summary>
-	interface IVector2d
+	public interface IVector2d
 	{
 		int X { get; set; }
 		int Y { get; set; }

@@ -1,14 +1,13 @@
-﻿using static System.Math;
-using WebSocketTest.Datatypes.Vectors;
+﻿using System;
 
-namespace WebSocketTest.Datatypes
+namespace WebSocketTest.Datatypes.Vectors
 {
-	class Velocity2d : Vector2d
+	public class Velocity2d : Vector2d
 	{
 		public double SpeedMultiplier { get; private set; } = 1;
 		public double Speed
 		{
-			get => Sqrt(Pow(X * SpeedMultiplier, 2) + Pow(X * SpeedMultiplier, 2));
+			get => Math.Sqrt(Math.Pow(X * SpeedMultiplier, 2) + Math.Pow(X * SpeedMultiplier, 2));
 		}
 
 		public Velocity2d(int x, int y) : base(x, y) { }

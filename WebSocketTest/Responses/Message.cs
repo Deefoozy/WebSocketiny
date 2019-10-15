@@ -4,10 +4,10 @@ using System.IO;
 
 namespace WebSocketTest.Responses
 {
-	class Message
+	public class Message
 	{
 		/// <summary>
-		/// Generates message that can be sent to a client
+		/// Generates message that can be sent to a TcpClient
 		/// </summary>
 		/// <param name="message"></param>
 		/// <returns></returns>

@@ -7,11 +7,12 @@ using System.Linq;
 using WebSocketTest.Decoders;
 using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
+using WebSocketTest.Datatypes.Clients;
 using WebSocketTest.ResponseHandlers;
 
 namespace WebSocketTest.ConnectionHandlers
 {
-	class ClientConnection
+	public class ClientConnection
 	{
 		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
 		private readonly List<Game> _activeGames = new List<Game>();
@@ -19,21 +20,21 @@ namespace WebSocketTest.ConnectionHandlers
 
 		public ClientConnection()
 		{
-			for (int i = 0; i < 5; i++)
+			for (var i = 0; i < 5; i++)
 				_activeGames.Add(new Game(_gameId++));
 		}
 
 		/// <summary>
-		/// Accept a new client, by handshaking and starting to wait for messages
+		/// Accept a new TcpClient, by handshaking and starting to wait for messages
 		/// </summary>
 		/// <param name="clientData"></param>
 		public void Accept(Client clientData)
 		{
 			// Wait untill part of the initial connection message has been received
-			while (clientData.client.Available < Encoding.UTF8.GetByteCount("GET"))
+			while (clientData.TcpClient.Available < Encoding.UTF8.GetByteCount("GET"))
 				Thread.Sleep(1);
 
-			string data = Encoding.UTF8.GetString(ReadStream(clientData, true));
+			var data = Encoding.UTF8.GetString(ReadStream(clientData, true));
 
 			// Check if http request
 			if (data.StartsWith("GET"))
@@ -42,51 +43,49 @@ namespace WebSocketTest.ConnectionHandlers
 				{
 					MessageSender.SendToSpecific(Handshake.GenerateHandshake(data), clientData);
 				}
-				catch (Exception exep)
+				catch (Exception exception)
 				{
-					Console.WriteLine($"{clientData.id} | Could not accept client connection | {exep}");
+					Console.WriteLine($"{clientData.Id} | Could not accept TcpClient connection | {exception}");
 				}
 			}
 			else
 			{
-				Console.WriteLine($"{clientData.id} | Could not accept client connection");
+				Console.WriteLine($"{clientData.Id} | Could not accept TcpClient connection");
 				return;
 			}
 
-			// Add client to active clients and assign that client to a game
-			_activeClients.Add(clientData.id, clientData);
+			// Add TcpClient to active clients and assign that TcpClient to a game
+			_activeClients.Add(clientData.Id, clientData);
 			AssignToGame(clientData, _activeGames);
 
-			// Start waiting for messages, does not return untill client disconnects
+			// Start waiting for messages, does not return untill TcpClient disconnects
 			WaitForMessage(clientData);
 
-			// End connection with client
-			clientData.client.GetStream().Close();
-			Console.WriteLine($"{clientData.id} | Closed client connection");
+			// End connection with TcpClient
+			clientData.TcpClient.GetStream().Close();
+			Console.WriteLine($"{clientData.Id} | Closed TcpClient connection");
 		}
 
 		/// <summary>
-		/// Starts waiting for message, returns void when client disconnects or connection has to be closed
+		/// Starts waiting for message, returns void when TcpClient disconnects or connection has to be closed
 		/// </summary>
 		/// <param name="clientData"></param>
 		private void WaitForMessage(Client clientData)
 		{
-			bool open = true;
-
-			while (open)
+			while (true)
 			{
-				// Close connection if the client disconnected
-				if (!clientData.client.Connected)
+				// Close connection if the TcpClient disconnected
+				if (!clientData.TcpClient.Connected)
 					return;
 
 				// Wait untill message data is available
-				while (!clientData.client.GetStream().DataAvailable)
+				while (!clientData.TcpClient.GetStream().DataAvailable)
 				{
-					// Check if client is still connected
-					if (clientData.client.Client.Poll(10, SelectMode.SelectRead))
+					// Check if TcpClient is still connected
+					if (clientData.TcpClient.Client.Poll(10, SelectMode.SelectRead))
 					{
-						// Remove the client and end WaitForMessage
-						RemoveClient(clientData.id);
+						// Remove the TcpClient and end WaitForMessage
+						RemoveClient(clientData.Id);
 						return;
 					}
 
@@ -94,11 +93,11 @@ namespace WebSocketTest.ConnectionHandlers
 					Thread.Sleep(1);
 				}
 
-				ReceivedMessage incomingMessage = MessageDecoder.DecodeMessage(ReadStream(clientData));
+				var incomingMessage = MessageDecoder.DecodeMessage(ReadStream(clientData));
 
-				if (incomingMessage.close)
+				if (incomingMessage.Close)
 				{
-					RemoveClient(clientData.id);
+					RemoveClient(clientData.Id);
 					break;
 				}
 
@@ -106,7 +105,7 @@ namespace WebSocketTest.ConnectionHandlers
 
 				// DO WHATEVS
 
-				Console.WriteLine($"{clientData.id} | {incomingMessage.content}");
+				Console.WriteLine($"{clientData.Id} | {incomingMessage.Content}");
 
 				// byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
 				// byte[] resp = Message.GenerateMessage("yes my dude");
@@ -125,15 +124,15 @@ namespace WebSocketTest.ConnectionHandlers
 		/// <param name="clientData"></param>
 		/// <param name="initial"></param>
 		/// <returns></returns>
-		private byte[] ReadStream(Client clientData, bool initial = false)
+		private static byte[] ReadStream(Client clientData, bool initial = false)
 		{
-			byte[] bytes = new byte[initial ? clientData.client.Available : 1024];
-			clientData.client.GetStream().Read(bytes, 0, bytes.Length);
+			var bytes = new byte[initial ? clientData.TcpClient.Available : 1024];
+			clientData.TcpClient.GetStream().Read(bytes, 0, bytes.Length);
 			return bytes;
 		}
 
 		/// <summary>
-		/// Removes client from activeClients by id
+		/// Removes TcpClient from activeClients by Id
 		/// </summary>
 		/// <param name="id"></param>
 		private void RemoveClient(int id)
@@ -142,17 +141,17 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Assigns specified client to a Game in the gamePool
+		/// Assigns specified TcpClient to a Game in the gamePool
 		/// </summary>
 		/// <param name="passedClient"></param>
 		/// <param name="gamePool"></param>
 		private void AssignToGame(Client passedClient, List<Game> gamePool)
 		{
-			for (int i = 0; i < gamePool.Count; i++)
+			foreach (var game in gamePool)
 			{
-				if (gamePool[i].playerAmount < 2)
+				if (game.playerAmount < 2)
 				{
-					gamePool[i].AddPlayer(passedClient);
+					game.AddPlayer(passedClient);
 					break;
 				}
 			}
@@ -170,7 +169,7 @@ namespace WebSocketTest.ConnectionHandlers
 			}
 			else
 			{
-				for (int i = 0; i < _activeGames.Count; i++)
+				for (var i = 0; i < _activeGames.Count; i++)
 				{
 					if (_activeGames[i].playerAmount == 0 && _activeGames.Count > 2)
 					{

@@ -1,14 +1,18 @@
-﻿namespace WebSocketTest.Datatypes
+﻿using WebSocketTest.Datatypes.Vectors;
+using WebSocketTest.Interfaces;
+
+namespace WebSocketTest.Datatypes
 {
-	class GameObject : IPhysicsData
+	public class GameObject : IPhysicsData
 	{
 		public Position2d Position { get; private set; }
 		public Dimensions2d Dimensions { get; private set; }
 		public Velocity2d Velocity { get; private set; }
-		public int MaxSpeed { get; private set; }
+		public int MaxSpeed { get; }
 
-		public GameObject(IVector2d position, IVector2d dimensions, IVector2d velocity)
+		public GameObject(IVector2d position, IVector2d dimensions, IVector2d velocity, int maxSpeed)
 		{
+			MaxSpeed = maxSpeed;
 			Init(
 				(Position2d)position,
 				(Dimensions2d)dimensions,
@@ -16,8 +20,9 @@
 			);
 		}
 
-		public GameObject(IPhysicsData phys)
+		public GameObject(IPhysicsData phys, int maxSpeed)
 		{
+			MaxSpeed = maxSpeed;
 			Init(
 				phys.Position,
 				phys.Dimensions,

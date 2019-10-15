@@ -1,6 +1,6 @@
-﻿namespace WebSocketTest.Datatypes
+﻿namespace WebSocketTest.Datatypes.Clients
 {
-	class Inputs
+	public class Inputs
 	{
 		private bool _leftInput;
 		private bool _rightInput;

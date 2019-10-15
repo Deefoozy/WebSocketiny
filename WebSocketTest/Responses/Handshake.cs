@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WebSocketTest.Responses
 {
-	static class Handshake
+	public static class Handshake
 	{
 		private const string CLIENT_KEY_REQUEST_HEADER = "Sec-WebSocket-Key: ";
 		private const string SERVER_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";

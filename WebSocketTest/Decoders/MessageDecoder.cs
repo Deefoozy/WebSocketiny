@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace WebSocketTest.Decoders
 {
-	class MessageDecoder
+	public class MessageDecoder
 	{
 		/// <summary>
 		/// Decodes received message and determines if it should close the connection or not
@@ -28,11 +28,11 @@ namespace WebSocketTest.Decoders
 				return new ReceivedMessage("", true);
 
 			// Get the 4 masking bytes
-			IEnumerable<byte> keys = message.Skip(indexFirstMask).Take(4);
-			int indexFirstDataByte = indexFirstMask + 4;
+			var keys = message.Skip(indexFirstMask).Take(4);
+			var indexFirstDataByte = indexFirstMask + 4;
 
 			// Create decoded byte array to store the decoded message
-			byte[] decoded = new byte[message.Length - indexFirstDataByte];
+			var decoded = new byte[message.Length - indexFirstDataByte];
 
 			// Decode the message
 			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < dataLength + indexFirstDataByte; encodedIndex++, decodedIndex++)
@@ -43,15 +43,15 @@ namespace WebSocketTest.Decoders
 		}
 	}
 
-	class ReceivedMessage
+	public class ReceivedMessage
 	{
-		public readonly string content;
-		public readonly bool close;
+		public string Content { get; }
+		public bool Close { get; }
 
 		public ReceivedMessage(string receivedContent, bool closeConnection)
 		{
-			content = receivedContent;
-			close = closeConnection;
+			Content = receivedContent;
+			Close = closeConnection;
 		}
 	}
 }

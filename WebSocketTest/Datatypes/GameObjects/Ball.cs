@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Globalization;
+using WebSocketTest.Datatypes.Vectors;
+using WebSocketTest.Interfaces;
 
-namespace WebSocketTest.Datatypes
+namespace WebSocketTest.Datatypes.GameObjects
 {
-	class Ball : GameObject
+	public class Ball : GameObject
 	{
-		public Ball(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
+		public Ball(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity, 0) { }
 
-		public Ball(IPhysicsData phys) : base(phys) { }
+		public Ball(IPhysicsData phys) : base(phys, 0) { }
 
 		/// <summary>
 		/// Reverse the X velocity
@@ -14,7 +17,7 @@ namespace WebSocketTest.Datatypes
 		/// <param name="offset"></param>
 		public void BounceX(double offset)
 		{
-			Console.WriteLine(offset.ToString());
+			Console.WriteLine(offset.ToString(CultureInfo.InvariantCulture));
 			Velocity.X -= Velocity.X * 2;
 
 			if (Velocity.Speed < MaxSpeed)
