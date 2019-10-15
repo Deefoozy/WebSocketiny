@@ -7,11 +7,11 @@ namespace WebSocketTest.Datatypes
 	{
 		public readonly int id;
 		public readonly Player[] players = new Player[2];
-		// public List<Client> spectators;
-		public int playerAmount;
-		public bool ready;
 
 		private Ball _ball = new Ball(new Position2d(0, 0), new Dimensions2d(0, 0), new Velocity2d(0, 0));
+
+		public int playerAmount;
+		public bool ready;
 
 		public Game(int passedId)
 		{
@@ -19,7 +19,7 @@ namespace WebSocketTest.Datatypes
 		}
 
 		/// <summary>
-		/// Adds player to game when the game has not started yet and checks if the game can be started
+		///     Adds player to game when the game has not started yet and checks if the game can be started
 		/// </summary>
 		/// <param name="targetClient"></param>
 		/// <returns></returns>
@@ -39,7 +39,7 @@ namespace WebSocketTest.Datatypes
 		}
 
 		/// <summary>
-		/// Starts game
+		///     Starts game
 		/// </summary>
 		public void StartGame()
 		{

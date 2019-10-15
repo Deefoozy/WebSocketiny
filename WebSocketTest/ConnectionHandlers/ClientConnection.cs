@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
-using WebSocketTest.Decoders;
-using WebSocketTest.Responses;
 using WebSocketTest.Datatypes;
+using WebSocketTest.Decoders;
 using WebSocketTest.ResponseHandlers;
+using WebSocketTest.Responses;
 
 namespace WebSocketTest.ConnectionHandlers
 {
@@ -24,7 +24,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Accept a new client, by handshaking and starting to wait for messages
+		///     Accept a new client, by handshaking and starting to wait for messages
 		/// </summary>
 		/// <param name="clientData"></param>
 		public void Accept(Client clientData)
@@ -66,7 +66,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Starts waiting for message, returns void when client disconnects or connection has to be closed
+		///     Starts waiting for message, returns void when client disconnects or connection has to be closed
 		/// </summary>
 		/// <param name="clientData"></param>
 		private void WaitForMessage(Client clientData)
@@ -120,7 +120,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Reads stream of specified user and returns the message bytes
+		///     Reads stream of specified user and returns the message bytes
 		/// </summary>
 		/// <param name="clientData"></param>
 		/// <param name="initial"></param>
@@ -133,7 +133,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Removes client from activeClients by id
+		///     Removes client from activeClients by id
 		/// </summary>
 		/// <param name="id"></param>
 		private void RemoveClient(int id)
@@ -142,7 +142,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Assigns specified client to a Game in the gamePool
+		///     Assigns specified client to a Game in the gamePool
 		/// </summary>
 		/// <param name="passedClient"></param>
 		/// <param name="gamePool"></param>
@@ -159,7 +159,7 @@ namespace WebSocketTest.ConnectionHandlers
 		}
 
 		/// <summary>
-		/// Updates gamelist
+		///     Updates gamelist
 		/// </summary>
 		private void UpdateGameList()
 		{

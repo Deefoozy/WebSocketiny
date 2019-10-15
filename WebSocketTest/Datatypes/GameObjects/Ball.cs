@@ -4,12 +4,14 @@ namespace WebSocketTest.Datatypes
 {
 	class Ball : GameObject
 	{
-		public Ball(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
+		public Ball(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity)
+		{
+		}
 
 		public Ball(IPhysicsData phys) : base(phys) { }
 
 		/// <summary>
-		/// Reverse the X velocity
+		///     Reverse the X velocity
 		/// </summary>
 		/// <param name="offset"></param>
 		public void BounceX(double offset)
@@ -22,7 +24,7 @@ namespace WebSocketTest.Datatypes
 		}
 
 		/// <summary>
-		/// Reverse the Y velocity
+		///     Reverse the Y velocity
 		/// </summary>
 		public void BounceY()
 		{
@@ -30,7 +32,7 @@ namespace WebSocketTest.Datatypes
 		}
 
 		/// <summary>
-		/// Updates Position
+		///     Updates Position
 		/// </summary>
 		/// <returns></returns>
 		public Position2d Move()

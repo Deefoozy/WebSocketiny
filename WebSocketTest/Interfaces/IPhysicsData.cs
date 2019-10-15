@@ -1,7 +1,7 @@
 ﻿namespace WebSocketTest.Datatypes
 {
 	/// <summary>
-	/// A collection of 2d vectors and information relating to physics
+	///     A collection of 2d vectors and information relating to physics
 	/// </summary>
 	interface IPhysicsData
 	{

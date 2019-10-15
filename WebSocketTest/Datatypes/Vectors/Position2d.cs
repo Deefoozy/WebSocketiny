@@ -7,7 +7,7 @@ namespace WebSocketTest.Datatypes
 		public Position2d(int x, int y) : base(x, y) { }
 
 		/// <summary>
-		/// Sets position to the provided coordinates
+		///     Sets position to the provided coordinates
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>

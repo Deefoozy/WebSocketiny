@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Text;
 using System.IO;
+using System.Text;
 
 namespace WebSocketTest.Responses
 {
 	class Message
 	{
 		/// <summary>
-		/// Generates message that can be sent to a client
+		///     Generates message that can be sent to a client
 		/// </summary>
 		/// <param name="message"></param>
 		/// <returns></returns>
@@ -42,7 +42,7 @@ namespace WebSocketTest.Responses
 			else if (payload.Length <= 65535)
 			{
 				// Assign a bytevalue of 126 to messageLength and use the 2 following bytes to designate message length
-				messageLength = (byte)126;
+				messageLength = 126;
 
 				memoryStream.WriteByte(messageLength);
 
@@ -56,7 +56,7 @@ namespace WebSocketTest.Responses
 			else
 			{
 				// Assign a bytevalue of 127 to messageLength and use the 4 following bytes to designate message length
-				messageLength = (byte)127;
+				messageLength = 127;
 
 				memoryStream.WriteByte(messageLength);
 

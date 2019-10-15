@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using WebSocketTest.ConnectionHandlers;
 using WebSocketTest.Datatypes;
@@ -11,11 +11,11 @@ namespace WebSocketTest.Programs
 	{
 		private static readonly IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 8080);
 
-		private static bool isAccepting = true;
+		private static readonly bool isAccepting = true;
 		public static int connectionAmount;
 
 		/// <summary>
-		/// Method that initiates the websocket server
+		///     Method that initiates the websocket server
 		/// </summary>
 		internal static void InitTcpServer()
 		{

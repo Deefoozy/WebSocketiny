@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using WebSocketTest.Responses;
+using System.Text;
 using WebSocketTest.Datatypes;
+using WebSocketTest.Responses;
 
 namespace WebSocketTest.ResponseHandlers
 {
 	static class MessageSender
 	{
 		/// <summary>
-		/// Send message to all specified clients
+		///     Send message to all specified clients
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
@@ -28,7 +28,7 @@ namespace WebSocketTest.ResponseHandlers
 		}
 
 		/// <summary>
-		/// Send message to all specified clients
+		///     Send message to all specified clients
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
@@ -48,7 +48,7 @@ namespace WebSocketTest.ResponseHandlers
 		}
 
 		/// <summary>
-		/// Send message to client if that client exists within the targetClients
+		///     Send message to client if that client exists within the targetClients
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
@@ -66,7 +66,7 @@ namespace WebSocketTest.ResponseHandlers
 		}
 
 		/// <summary>
-		/// Send message to the given client
+		///     Send message to the given client
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>

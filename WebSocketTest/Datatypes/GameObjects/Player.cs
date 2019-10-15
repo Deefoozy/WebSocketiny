@@ -2,19 +2,22 @@
 {
 	class Player : GameObject
 	{
-		private int _score = 0;
-		private int _playerNumber;
-		private int _speed = 15;
 		private Inputs _inputs = new Inputs();
+		private int _playerNumber;
+		private readonly int _score = 0;
+		private readonly int _speed = 15;
 
-		public Client ClientInfo { get; private set; }
-
-		public Player(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions, velocity) { }
+		public Player(IVector2d position, IVector2d dimensions, IVector2d velocity) : base(position, dimensions,
+			velocity)
+		{
+		}
 
 		public Player(IPhysicsData phys) : base(phys) { }
 
+		public Client ClientInfo { get; private set; }
+
 		/// <summary>
-		/// Binds client to player
+		///     Binds client to player
 		/// </summary>
 		/// <param name="passedClient"></param>
 		/// <param name="passedPlayerNumber"></param>
@@ -29,7 +32,7 @@
 		}
 
 		/// <summary>
-		/// Moves player to the left
+		///     Moves player to the left
 		/// </summary>
 		public void MoveLeft()
 		{
@@ -37,7 +40,7 @@
 		}
 
 		/// <summary>
-		/// Moves player to the right
+		///     Moves player to the right
 		/// </summary>
 		public void MoveRight()
 		{
@@ -45,7 +48,7 @@
 		}
 
 		/// <summary>
-		/// Gets player score
+		///     Gets player score
 		/// </summary>
 		/// <returns></returns>
 		public int GetScore()

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace WebSocketTest.Decoders
 {
 	class MessageDecoder
 	{
 		/// <summary>
-		/// Decodes received message and determines if it should close the connection or not
+		///     Decodes received message and determines if it should close the connection or not
 		/// </summary>
 		/// <param name="message"></param>
 		/// <returns></returns>
@@ -35,7 +35,9 @@ namespace WebSocketTest.Decoders
 			byte[] decoded = new byte[message.Length - indexFirstDataByte];
 
 			// Decode the message
-			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < dataLength + indexFirstDataByte; encodedIndex++, decodedIndex++)
+			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0;
+				encodedIndex < dataLength + indexFirstDataByte;
+				encodedIndex++, decodedIndex++)
 				decoded[decodedIndex] = (byte)(message[encodedIndex] ^ keys.ElementAt(decodedIndex % 4));
 
 			// Return decoded message
@@ -45,8 +47,8 @@ namespace WebSocketTest.Decoders
 
 	class ReceivedMessage
 	{
-		public readonly string content;
 		public readonly bool close;
+		public readonly string content;
 
 		public ReceivedMessage(string receivedContent, bool closeConnection)
 		{

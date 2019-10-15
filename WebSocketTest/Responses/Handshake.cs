@@ -10,21 +10,22 @@ namespace WebSocketTest.Responses
 		private const string SERVER_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
 
 		/// <summary>
-		/// Generates handshake message for new connections
+		///     Generates handshake message for new connections
 		/// </summary>
 		/// <param name="clientRequest"></param>
 		/// <returns></returns>
 		public static string GenerateHandshake(string clientRequest)
 		{
 			// Get position of the websocket key, then retrieve that key and add the server key to that.
-			int secWebSocketKeyPosition = clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
+			int secWebSocketKeyPosition =
+				clientRequest.IndexOf(CLIENT_KEY_REQUEST_HEADER) + CLIENT_KEY_REQUEST_HEADER.Length;
 			string receivedKey = clientRequest.Substring(secWebSocketKeyPosition, 24);
 			string responseKey = receivedKey + SERVER_KEY;
 
 			// Define end of line
 			const string eol = "\r\n";
 			string responseKeyHash = Convert.ToBase64String(
-				inArray: SHA1.Create().ComputeHash(
+				SHA1.Create().ComputeHash(
 					Encoding.UTF8.GetBytes(responseKey)
 				)
 			);
