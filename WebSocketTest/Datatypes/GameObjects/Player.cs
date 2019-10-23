@@ -44,14 +44,5 @@
 		{
 			Position.X += _speed;
 		}
-
-		/// <summary>
-		/// Gets player score
-		/// </summary>
-		/// <returns></returns>
-		public int GetScore()
-		{
-			return _score;
-		}
 	}
 }
