@@ -2,10 +2,11 @@
 {
 	class Player : GameObject
 	{
-		private int _score = 0;
 		private int _playerNumber;
 		private int _speed = 15;
 		private Inputs _inputs = new Inputs();
+
+		public int Score { get; }
 
 		public Client ClientInfo { get; private set; }
 
