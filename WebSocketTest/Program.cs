@@ -1,4 +1,5 @@
-﻿using WebSocketTest.Programs;
+﻿using System.Net;
+using WebSocketTest.Programs;
 
 namespace WebSocketTest
 {
@@ -6,7 +7,7 @@ namespace WebSocketTest
 	{
 		static void Main(string[] args)
 		{
-			TcpServer.InitTcpServer();
+			new TcpServer(new IPEndPoint(IPAddress.Any, 8080));
 		}
 	}
 }
