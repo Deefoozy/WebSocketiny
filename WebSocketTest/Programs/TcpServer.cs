@@ -12,6 +12,7 @@ namespace WebSocketTest.Programs
 		readonly IPEndPoint _endpoint;
 
 		private bool _isAccepting = true;
+		private bool _initiated = false;
 		public int connectionAmount;
 
 		/// <summary>
@@ -20,17 +21,20 @@ namespace WebSocketTest.Programs
 		public TcpServer(IPEndPoint endpoint)
 		{
 			_endpoint = endpoint;
-
-			Init();
 		}
 
-		public TcpServer(IPAddress ipAddress, int port) {
+		public TcpServer(IPAddress ipAddress, int port)
+		{
 			_endpoint = new IPEndPoint(ipAddress, port);
-			
-			Init();
 		}
 
-		private void Init() {
+		public void Init()
+		{
+			if (_initiated)
+				return;
+			else
+				_initiated = true;
+
 			Console.WriteLine("Setting up clientConnection handler");
 			// Set up the clientConnection connectionHandler to be able to accept clients on multiple threads
 			ClientConnection clientConnection = new ClientConnection();
@@ -48,7 +52,7 @@ namespace WebSocketTest.Programs
 				// Wait untill a client connects
 				TcpClient client = server.AcceptTcpClient();
 
-				Client temporaryClient = new Client(connectionAmount, client);
+				Client temporaryClient = new Client(connectionAmount, client, EReceivedMessage);
 
 				Console.WriteLine($"Client | {connectionAmount}");
 
@@ -66,5 +70,9 @@ namespace WebSocketTest.Programs
 				// _isAccepting = false;
 			}
 		}
+
+		public event MessageEventCallback EReceivedMessage;
 	}
+
+	public delegate void MessageEventCallback(string message, int user);
 }

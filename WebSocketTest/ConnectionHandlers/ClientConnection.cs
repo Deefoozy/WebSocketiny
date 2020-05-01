@@ -14,14 +14,8 @@ namespace WebSocketTest.ConnectionHandlers
 	class ClientConnection
 	{
 		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
-		private readonly List<Game> _activeGames = new List<Game>();
-		private int _gameId;
 
-		public ClientConnection()
-		{
-			for (int i = 0; i < 5; i++)
-				_activeGames.Add(new Game(_gameId++));
-		}
+		public ClientConnection() { }
 
 		/// <summary>
 		/// Accept a new client, by handshaking and starting to wait for messages
@@ -55,7 +49,6 @@ namespace WebSocketTest.ConnectionHandlers
 
 			// Add client to active clients and assign that client to a game
 			_activeClients.Add(clientData.id, clientData);
-			AssignToGame(clientData, _activeGames);
 
 			// Start waiting for messages, does not return untill client disconnects
 			WaitForMessage(clientData);
@@ -83,7 +76,7 @@ namespace WebSocketTest.ConnectionHandlers
 				while (!clientData.client.GetStream().DataAvailable)
 				{
 					// Check if client is still connected
-					if (clientData.client.Client.Poll(10, SelectMode.SelectRead))
+					if (clientData.client.Client.Poll(1000, SelectMode.SelectRead))
 					{
 						// Remove the client and end WaitForMessage
 						RemoveClient(clientData.id);
@@ -102,11 +95,9 @@ namespace WebSocketTest.ConnectionHandlers
 					break;
 				}
 
+				clientData.ExecCallback(incomingMessage.content);
+
 				MessageSender.SendToAll("a", _activeClients.Values.ToList());
-
-				// DO WHATEVS
-
-				Console.WriteLine($"{clientData.id} | {incomingMessage.content}");
 
 				// byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
 				// byte[] resp = Message.GenerateMessage("yes my dude");
@@ -139,50 +130,6 @@ namespace WebSocketTest.ConnectionHandlers
 		private void RemoveClient(int id)
 		{
 			_activeClients.Remove(id);
-		}
-
-		/// <summary>
-		/// Assigns specified client to a Game in the gamePool
-		/// </summary>
-		/// <param name="passedClient"></param>
-		/// <param name="gamePool"></param>
-		private void AssignToGame(Client passedClient, List<Game> gamePool)
-		{
-			for (int i = 0; i < gamePool.Count; i++)
-			{
-				if (gamePool[i].playerAmount < 2)
-				{
-					gamePool[i].AddPlayer(passedClient);
-					break;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Updates gamelist
-		/// </summary>
-		private void UpdateGameList()
-		{
-			// Faulty logic | fix later
-			if (_activeGames.Count == 0)
-			{
-				_activeGames.Add(new Game(_gameId++));
-			}
-			else
-			{
-				for (int i = 0; i < _activeGames.Count; i++)
-				{
-					if (_activeGames[i].playerAmount == 0 && _activeGames.Count > 2)
-					{
-						_activeGames.RemoveAt(i);
-						i--;
-					}
-					else if (_activeGames[i].playerAmount == 2)
-					{
-						_activeGames.Add(new Game(_gameId++));
-					}
-				}
-			}
 		}
 	}
 }
