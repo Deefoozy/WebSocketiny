@@ -54,8 +54,8 @@ namespace WebSocketTest.Programs
 
 				Client temporaryClient = new Client(connectionAmount, client);
 
-				temporaryClient.ReceivedMessageCallback += ReceivedMessageEvent;
-				temporaryClient.DisconnectCallback += ClientDisconnectEvent;
+				temporaryClient.ReceivedMessageCallback += ReceivedMessage;
+				temporaryClient.DisconnectCallback += ClientDisconnect;
 
 				Console.WriteLine($"Client | {connectionAmount}");
 
@@ -63,7 +63,7 @@ namespace WebSocketTest.Programs
 				Thread newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
-					ClientConnectedEvent(temporaryClient);
+					ClientConnected(temporaryClient);
 				});
 
 				newThread.Start();
@@ -75,10 +75,10 @@ namespace WebSocketTest.Programs
 			}
 		}
 
-		public event MessageEventCallback ReceivedMessageEvent;
-		public event ConnectionEventCallback ClientConnectedEvent;
-		public event DisconnectEventCallback ClientDisconnectEvent;
-		public event ErrorEventCallback ErrorEvent;
+		public event MessageEventCallback ReceivedMessage;
+		public event ConnectionEventCallback ClientConnected;
+		public event DisconnectEventCallback ClientDisconnect;
+		public event ErrorEventCallback CaughtError;
 	}
 
 	public delegate void MessageEventCallback(string message, int user);

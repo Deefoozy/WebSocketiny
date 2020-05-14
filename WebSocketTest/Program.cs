@@ -9,7 +9,7 @@ namespace WebSocketTest
 		static void Main(string[] args)
 		{
 			TcpServer tcpServer = new TcpServer(new IPEndPoint(IPAddress.Any, 8080));
-			tcpServer.ReceivedMessageEvent += Log;
+			tcpServer.ReceivedMessage += Log;
 		}
 
 		static void Log(string message, int user) {
