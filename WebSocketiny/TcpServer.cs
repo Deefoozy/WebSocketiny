@@ -5,7 +5,7 @@ using System.Threading;
 using WebSocketTest.ConnectionHandlers;
 using WebSocketTest.Datatypes;
 
-namespace WebSocketTest.Programs
+namespace Websocketiny
 {
 	class TcpServer
 	{
