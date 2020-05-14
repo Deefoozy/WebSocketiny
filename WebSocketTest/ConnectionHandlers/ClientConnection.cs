@@ -15,8 +15,6 @@ namespace WebSocketTest.ConnectionHandlers
 	{
 		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
 
-		public ClientConnection() { }
-
 		/// <summary>
 		/// Accept a new client, by handshaking and starting to wait for messages
 		/// </summary>
@@ -80,6 +78,7 @@ namespace WebSocketTest.ConnectionHandlers
 					{
 						// Remove the client and end WaitForMessage
 						RemoveClient(clientData.id);
+						clientData.ExecDisconnectCallback();
 						return;
 					}
 
@@ -95,9 +94,7 @@ namespace WebSocketTest.ConnectionHandlers
 					break;
 				}
 
-				clientData.ExecCallback(incomingMessage.content);
-
-				MessageSender.SendToAll("a", _activeClients.Values.ToList());
+				clientData.ExecMessageCallback(incomingMessage.content);
 
 				// byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
 				// byte[] resp = Message.GenerateMessage("yes my dude");

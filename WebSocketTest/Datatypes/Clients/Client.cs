@@ -3,21 +3,28 @@ using WebSocketTest.Programs;
 
 namespace WebSocketTest.Datatypes
 {
-	class Client
+	public class Client
 	{
 		public readonly int id;
 		public readonly TcpClient client;
-		public readonly MessageEventCallback ReceivedMessageCallback;
 
-		public Client(int passedClientId, TcpClient passedClient, MessageEventCallback receivedMessageCallback)
+		public Client(int passedClientId, TcpClient passedClient)
 		{
 			id = passedClientId;
 			client = passedClient;
-			ReceivedMessageCallback = receivedMessageCallback;
 		}
 
-		public void ExecCallback(string message) {
+		public void ExecMessageCallback(string message)
+		{
 			ReceivedMessageCallback(message, id);
 		}
+
+		public void ExecDisconnectCallback()
+		{
+			DisconnectCallback(this);
+		}
+
+		public event MessageEventCallback ReceivedMessageCallback;
+		public event DisconnectEventCallback DisconnectCallback;
 	}
 }

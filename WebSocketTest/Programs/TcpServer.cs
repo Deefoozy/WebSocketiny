@@ -52,7 +52,10 @@ namespace WebSocketTest.Programs
 				// Wait untill a client connects
 				TcpClient client = server.AcceptTcpClient();
 
-				Client temporaryClient = new Client(connectionAmount, client, EReceivedMessage);
+				Client temporaryClient = new Client(connectionAmount, client);
+
+				temporaryClient.ReceivedMessageCallback += EReceivedMessage;
+				temporaryClient.DisconnectCallback += EClientDisconnect;
 
 				Console.WriteLine($"Client | {connectionAmount}");
 
@@ -60,6 +63,7 @@ namespace WebSocketTest.Programs
 				Thread newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
+					EClientConnected(temporaryClient);
 				});
 
 				newThread.Start();
@@ -72,7 +76,11 @@ namespace WebSocketTest.Programs
 		}
 
 		public event MessageEventCallback EReceivedMessage;
+		public event ConnectionEventCallback EClientConnected;
+		public event DisconnectEventCallback EClientDisconnect;
 	}
 
 	public delegate void MessageEventCallback(string message, int user);
+	public delegate void ConnectionEventCallback(Client connectedClient);
+	public delegate void DisconnectEventCallback(Client connectedClient);
 }
