@@ -6,14 +6,6 @@ Currently only tested on windows.
 This project has a .sln file which should contain all the information needed!
 
 1. Clone project
-2. Install / Update Nuget packages
-
-After those steps everything should be set-up!
-
-## How to get started
-This project has a .sln file which should contain all the information needed!
-
-1. Clone project
 2. Switch to the `develop` branch in git
 3. Install / Update Nuget packages
 
