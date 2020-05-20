@@ -1,7 +1,6 @@
 ﻿using System.Net.Sockets;
-using WebSocketTest.Programs;
 
-namespace WebSocketTest.Datatypes
+namespace Websocketiny.Datatypes
 {
 	public class Client
 	{

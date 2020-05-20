@@ -2,10 +2,10 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using WebSocketTest.ConnectionHandlers;
-using WebSocketTest.Datatypes;
+using Websocketiny.ConnectionHandlers;
+using Websocketiny.Datatypes;
 
-namespace WebSocketTest.Programs
+namespace Websocketiny
 {
 	class TcpServer
 	{
