@@ -57,7 +57,7 @@ namespace WebSocketiny
 				Thread newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
-					ClientConnected(temporaryClient);
+					ClientConnected?.Invoke(temporaryClient);
 				});
 
 				newThread.Start();

@@ -15,12 +15,12 @@ namespace WebSocketiny.Datatypes
 
 		public void ExecMessageCallback(string message)
 		{
-			ReceivedMessageCallback(message, id);
+			ReceivedMessageCallback?.Invoke(message, id);
 		}
 
 		public void ExecDisconnectCallback()
 		{
-			DisconnectCallback(this);
+			DisconnectCallback?.Invoke(this);
 		}
 
 		public event MessageEventCallback? ReceivedMessageCallback;
