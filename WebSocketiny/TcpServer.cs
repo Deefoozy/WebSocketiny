@@ -2,10 +2,10 @@
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using Websocketiny.ConnectionHandlers;
-using Websocketiny.Datatypes;
+using WebSocketiny.ConnectionHandlers;
+using WebSocketiny.Datatypes;
 
-namespace Websocketiny
+namespace WebSocketiny
 {
 	class TcpServer
 	{
@@ -18,14 +18,8 @@ namespace Websocketiny
 		/// <summary>
 		/// Method that initiates the websocket server
 		/// </summary>
-		public TcpServer(IPEndPoint endpoint)
-		{
-			_endpoint = endpoint;
-		}
-
-		public TcpServer(IPAddress ipAddress, int port)
-		{
-			_endpoint = new IPEndPoint(ipAddress, port);
+		public TcpServer(TcpConfig config) {
+			_endpoint = new IPEndPoint(config.ipAddress, config.port);
 		}
 
 		public void Init()
@@ -63,7 +57,7 @@ namespace Websocketiny
 				Thread newThread = new Thread(() =>
 				{
 					clientConnection.Accept(temporaryClient);
-					ClientConnected(temporaryClient);
+					ClientConnected?.Invoke(temporaryClient);
 				});
 
 				newThread.Start();

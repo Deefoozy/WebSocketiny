@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using Websocketiny.Responses;
-using Websocketiny.Datatypes;
+using WebSocketiny.Responses;
+using WebSocketiny.Datatypes;
 
-namespace Websocketiny.ResponseHandlers
+namespace WebSocketiny.ResponseHandlers
 {
 	static class MessageSender
 	{

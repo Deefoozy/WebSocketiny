@@ -4,12 +4,12 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
-using Websocketiny.Decoders;
-using Websocketiny.Responses;
-using Websocketiny.Datatypes;
-using Websocketiny.ResponseHandlers;
+using WebSocketiny.Decoders;
+using WebSocketiny.Responses;
+using WebSocketiny.Datatypes;
+using WebSocketiny.ResponseHandlers;
 
-namespace Websocketiny.ConnectionHandlers
+namespace WebSocketiny.ConnectionHandlers
 {
 	class ClientConnection
 	{
