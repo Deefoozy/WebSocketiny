@@ -18,14 +18,8 @@ namespace Websocketiny
 		/// <summary>
 		/// Method that initiates the websocket server
 		/// </summary>
-		public TcpServer(IPEndPoint endpoint)
-		{
-			_endpoint = endpoint;
-		}
-
-		public TcpServer(IPAddress ipAddress, int port)
-		{
-			_endpoint = new IPEndPoint(ipAddress, port);
+		public TcpServer(TcpConfig config) {
+			_endpoint = new IPEndPoint(config.ipAddress, config.port);
 		}
 
 		public void Init()
