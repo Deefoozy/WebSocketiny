@@ -2,7 +2,7 @@
 using System.Text;
 using System.Linq;
 
-namespace Websocketiny.Decoders
+namespace WebSocketiny.Decoders
 {
 	class MessageDecoder
 	{

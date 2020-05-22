@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace Websocketiny.Datatypes
+namespace WebSocketiny.Datatypes
 {
 	public class Client
 	{
@@ -23,7 +23,7 @@ namespace Websocketiny.Datatypes
 			DisconnectCallback(this);
 		}
 
-		public event MessageEventCallback ReceivedMessageCallback;
-		public event DisconnectEventCallback DisconnectCallback;
+		public event MessageEventCallback? ReceivedMessageCallback;
+		public event DisconnectEventCallback? DisconnectCallback;
 	}
 }
