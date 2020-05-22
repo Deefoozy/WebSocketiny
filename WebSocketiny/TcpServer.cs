@@ -75,10 +75,10 @@ namespace Websocketiny
 			}
 		}
 
-		public event MessageEventCallback ReceivedMessage;
-		public event ConnectionEventCallback ClientConnected;
-		public event DisconnectEventCallback ClientDisconnect;
-		public event ErrorEventCallback CaughtError;
+		public event MessageEventCallback? ReceivedMessage;
+		public event ConnectionEventCallback? ClientConnected;
+		public event DisconnectEventCallback? ClientDisconnect;
+		public event ErrorEventCallback? CaughtError;
 	}
 
 	public delegate void MessageEventCallback(string message, int user);
