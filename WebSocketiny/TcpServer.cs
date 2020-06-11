@@ -7,12 +7,13 @@ using WebSocketiny.Datatypes;
 
 namespace WebSocketiny
 {
-	class TcpServer
+	public class TcpServer
 	{
 		readonly IPEndPoint _endpoint;
 
 		private bool _isAccepting = true;
 		private bool _initiated = false;
+		private TcpListener _server;
 		public int connectionAmount;
 
 		/// <summary>
@@ -20,6 +21,12 @@ namespace WebSocketiny
 		/// </summary>
 		public TcpServer(TcpConfig config) {
 			_endpoint = new IPEndPoint(config.ipAddress, config.port);
+		}
+
+		public void Stop()
+		{
+			_isAccepting = false;
+			_server.Stop();
 		}
 
 		public void Init()
@@ -34,8 +41,8 @@ namespace WebSocketiny
 			ClientConnection clientConnection = new ClientConnection();
 
 			// Setup server and start listening for connections
-			TcpListener server = new TcpListener(_endpoint);
-			server.Start();
+			_server = new TcpListener(_endpoint);
+			_server.Start();
 
 			Console.WriteLine($"Listener set up and listening on {_endpoint}");
 			Console.WriteLine("Waiting for clients");
@@ -44,7 +51,7 @@ namespace WebSocketiny
 			while (_isAccepting)
 			{
 				// Wait untill a client connects
-				TcpClient client = server.AcceptTcpClient();
+				TcpClient client = _server.AcceptTcpClient();
 
 				Client temporaryClient = new Client(connectionAmount, client);
 
