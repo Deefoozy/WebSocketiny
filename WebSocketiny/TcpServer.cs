@@ -13,7 +13,7 @@ namespace WebSocketiny
 
 		private bool _isAccepting = true;
 		private bool _initiated = false;
-		private TcpListener _server;
+		private TcpListener? _server;
 		public int connectionAmount;
 
 		/// <summary>
@@ -25,8 +25,9 @@ namespace WebSocketiny
 
 		public void Stop()
 		{
+			Console.WriteLine("Shutting down TcpServer");
 			_isAccepting = false;
-			_server.Stop();
+			_server?.Stop();
 		}
 
 		public void Init()
@@ -50,8 +51,18 @@ namespace WebSocketiny
 			// Loop that keeps accepting users and creates clients within the clientConnection untill the _isAccepting is set to false.
 			while (_isAccepting)
 			{
+				TcpClient client;
+
 				// Wait untill a client connects
-				TcpClient client = _server.AcceptTcpClient();
+				try
+				{
+					client = _server.AcceptTcpClient();
+				}
+				catch (SocketException Exception)
+				{
+					Console.WriteLine("Server disconnect when waiting for client.", Exception.Message);
+					return;
+				}
 
 				Client temporaryClient = new Client(connectionAmount, client);
 
