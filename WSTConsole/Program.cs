@@ -22,7 +22,8 @@ namespace WSTConsole
 			tcpServer.Init();
 		}
 
-		private static void ReceivedMessageHandler(string message, int user) {
+		private static void ReceivedMessageHandler(string message, int user)
+		{
 			Console.WriteLine($"Message:");
 			Console.WriteLine($"id {user} | {message}");
 		}
