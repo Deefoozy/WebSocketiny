@@ -2,7 +2,7 @@
 using System.Text;
 using System.IO;
 
-namespace WebSocketTest.Responses
+namespace WebSocketiny.Responses
 {
 	class Message
 	{

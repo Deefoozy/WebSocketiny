@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-using WebSocketTest.Responses;
-using WebSocketTest.Datatypes;
+using WebSocketiny.Responses;
+using WebSocketiny.Datatypes;
 
-namespace WebSocketTest.ResponseHandlers
+namespace WebSocketiny.ResponseHandlers
 {
 	static class MessageSender
 	{
@@ -20,26 +20,6 @@ namespace WebSocketTest.ResponseHandlers
 				try
 				{
 					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
-				}
-				catch
-				{
-					Console.WriteLine($"Error sending to| {i} | {targetClients[i]}");
-				}
-		}
-
-		/// <summary>
-		/// Send message to all specified clients
-		/// </summary>
-		/// <param name="message"></param>
-		/// <param name="targetClients"></param>
-		public static void SendToAll(string message, Player[] targetClients)
-		{
-			byte[] byteMessage = Message.GenerateMessage(message);
-
-			for (int i = 0; i < targetClients.Length; i++)
-				try
-				{
-					targetClients[i].ClientInfo.client.GetStream().Write(byteMessage, 0, byteMessage.Length);
 				}
 				catch
 				{
@@ -74,7 +54,7 @@ namespace WebSocketTest.ResponseHandlers
 		{
 			byte[] byteMessage = !handshake ? Message.GenerateMessage(message) : Encoding.UTF8.GetBytes(message);
 
-			targetClient.client.GetStream().Write(byteMessage);
+			targetClient.client.GetStream().Write(byteMessage, 0, byteMessage.Length);
 		}
 	}
 }

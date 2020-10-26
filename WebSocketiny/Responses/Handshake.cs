@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace WebSocketTest.Responses
+namespace WebSocketiny.Responses
 {
 	static class Handshake
 	{
