@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.IO;
+using WebSocketiny.DataTypes;
 
 namespace WebSocketiny.Responses
 {
@@ -20,11 +21,11 @@ namespace WebSocketiny.Responses
 
 			// opCode = content type
 			// FirstByte bits: 1 0 0 0 0 0 0 1
-			// FirstByte bit 1: continuation. 1 if last message
+			// FirstByte bit 1: continuation. 1 if last message or complete message
 			// FirstByte bit 2/4: reserved
 			// FirstByte bit 5/8: opCode
-			const byte opCode = 129;
-			memoryStream.WriteByte(opCode);
+			byte firstByte = GenerateFirstByte(OpCode.Text);
+			memoryStream.WriteByte(firstByte);
 
 			// Get byte of the message that has to be sent
 			byte[] payload = Encoding.UTF8.GetBytes(message);
@@ -71,6 +72,12 @@ namespace WebSocketiny.Responses
 
 			// Return array with message as array
 			return memoryStream.ToArray();
+		}
+
+		private static byte GenerateFirstByte(OpCode opCode, bool final = true)
+		{
+			// 128 = first byte 1. denoting a complete / finished frame
+			return (byte)((int)opCode + (final ? 128 : 0));
 		}
 	}
 }
