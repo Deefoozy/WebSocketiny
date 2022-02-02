@@ -8,6 +8,7 @@ namespace WSTConsole
 	static class Program
 	{
 		private static TcpServer tcpServer;
+
 		static void Main()
 		{
 			TcpConfig tcpConfig = new()
