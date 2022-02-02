@@ -7,6 +7,7 @@ namespace WebSocketiny.DataTypes
 		public readonly int id;
 		public readonly TcpClient client;
 		public readonly NetworkStream stream;
+		public bool active = true;
 
 		public Client(int passedClientId, TcpClient passedClient)
 		{
@@ -20,12 +21,18 @@ namespace WebSocketiny.DataTypes
 			ReceivedMessageCallback?.Invoke(message, id);
 		}
 
+		public void ExecConnectionCallback()
+		{
+			ConnectionCallback?.Invoke(this);
+		}
+
 		public void ExecDisconnectCallback()
 		{
 			DisconnectCallback?.Invoke(this);
 		}
 
 		public event MessageEventCallback? ReceivedMessageCallback;
+		public event ConnectionEventCallback? ConnectionCallback;
 		public event DisconnectEventCallback? DisconnectCallback;
 	}
 }

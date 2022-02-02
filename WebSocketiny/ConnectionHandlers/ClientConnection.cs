@@ -49,15 +49,17 @@ namespace WebSocketiny.ConnectionHandlers
 				return;
 			}
 
-			// Add client to active clients and assign that client to a game
+			// Add client to active clients
 			_activeClients.Add(clientData.id, clientData);
+			clientData.ExecConnectionCallback();
 
 			// Start waiting for messages, does not return until client disconnects
 			WaitForMessage(clientData);
 
 			// End connection with client
 			clientData.stream.Close();
-			Console.WriteLine($"{clientData.id} | Closed client connection");
+			clientData.active = false;
+			clientData.ExecDisconnectCallback();
 		}
 
 		/// <summary>

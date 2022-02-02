@@ -73,9 +73,8 @@ namespace WebSocketiny
 				Client temporaryClient = new Client(_connectionAmount, client);
 
 				temporaryClient.ReceivedMessageCallback += ReceivedMessage;
+				temporaryClient.ConnectionCallback += ClientConnected;
 				temporaryClient.DisconnectCallback += ClientDisconnect;
-
-				Console.WriteLine($"Client | {_connectionAmount}");
 
 				// Start a new thread with the client and start that thread
 				Thread newThread = new Thread(() =>
