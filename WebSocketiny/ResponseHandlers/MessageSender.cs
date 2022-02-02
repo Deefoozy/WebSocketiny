@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Linq;
 using WebSocketiny.Responses;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 
 namespace WebSocketiny.ResponseHandlers
 {
@@ -19,7 +20,7 @@ namespace WebSocketiny.ResponseHandlers
 			for (int i = 0; i < targetClients.Count; i++)
 				try
 				{
-					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
+					targetClients[i].stream.Write(byteMessage, 0, byteMessage.Length);
 				}
 				catch
 				{
@@ -33,16 +34,14 @@ namespace WebSocketiny.ResponseHandlers
 		/// <param name="message"></param>
 		/// <param name="targetClients"></param>
 		/// <param name="id"></param>
-		public static void SendToSpecific(string message, List<Client> targetClients, int id)
+		public static void SendToSpecific(string message, Dictionary<int, Client> targetClients, int id)
 		{
 			byte[] byteMessage = Message.GenerateMessage(message);
 
-			for (int i = 0; i < targetClients.Count; i++)
-				if (targetClients[i].id == id)
-				{
-					targetClients[i].client.GetStream().Write(byteMessage, 0, byteMessage.Length);
-					break;
-				}
+			if (targetClients.TryGetValue(key: id, out Client? client))
+			{
+				client.stream.Write(byteMessage, 0, byteMessage.Length);
+			}
 		}
 
 		/// <summary>
@@ -50,11 +49,12 @@ namespace WebSocketiny.ResponseHandlers
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="targetClient"></param>
+		/// <param name="handshake"></param>
 		public static void SendToSpecific(string message, Client targetClient, bool handshake = false)
 		{
 			byte[] byteMessage = !handshake ? Message.GenerateMessage(message) : Encoding.UTF8.GetBytes(message);
 
-			targetClient.client.GetStream().Write(byteMessage, 0, byteMessage.Length);
+			targetClient.stream.Write(byteMessage, 0, byteMessage.Length);
 		}
 	}
 }

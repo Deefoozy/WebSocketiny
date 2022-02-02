@@ -1,48 +1,56 @@
 ﻿using System;
 using System.Net;
 using WebSocketiny;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 
 namespace WSTConsole
 {
-	class Program
+	static class Program
 	{
-		static void Main(string[] args)
+		private static TcpServer tcpServer;
+
+		static void Main()
 		{
-			var tcpConfig = new TcpConfig
+			TcpConfig tcpConfig = new()
 			{
 				ipAddress = IPAddress.Any,
-				port = 6942,
+				port = 6944,
 			};
 
-			var tcpServer = new TcpServer(tcpConfig);
+			tcpServer = new TcpServer(tcpConfig);
 
 			tcpServer.ReceivedMessage += ReceivedMessageHandler;
+			tcpServer.ClientConnected += ConnectHandler;
+			tcpServer.ClientDisconnect += DisconnectHandler;
 
 			tcpServer.Init();
 		}
 
 		private static void ReceivedMessageHandler(string message, int user)
 		{
-			Console.WriteLine($"Message:");
+			Console.Write("Message:    ");
 			Console.WriteLine($"id {user} | {message}");
+
+			tcpServer.Send(message, user);
 		}
 
 		private static void ConnectHandler(Client connectedClient)
 		{
-			Console.WriteLine($"Connect:");
+			if (!connectedClient.active) return;
+
+			Console.Write("Connect:    ");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 
 		private static void DisconnectHandler(Client connectedClient)
 		{
-			Console.WriteLine($"Disconnect:");
+			Console.Write("Disconnect: ");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 
 		private static void ErrorHandler(Exception exception)
 		{
-			Console.WriteLine($"Error:");
+			Console.WriteLine("Error:");
 			Console.WriteLine($"Exception {exception}");
 		}
 	}

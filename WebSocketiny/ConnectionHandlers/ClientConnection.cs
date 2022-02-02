@@ -3,17 +3,21 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Collections.Generic;
-using System.Linq;
 using WebSocketiny.Decoders;
 using WebSocketiny.Responses;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 using WebSocketiny.ResponseHandlers;
 
 namespace WebSocketiny.ConnectionHandlers
 {
 	class ClientConnection
 	{
-		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
+		private readonly Dictionary<int, Client> _activeClients;
+
+		public ClientConnection(Dictionary<int, Client> activeClients)
+		{
+			_activeClients = activeClients;
+		}
 
 		/// <summary>
 		/// Accept a new client, by handshaking and starting to wait for messages
@@ -21,7 +25,7 @@ namespace WebSocketiny.ConnectionHandlers
 		/// <param name="clientData"></param>
 		public void Accept(Client clientData)
 		{
-			// Wait untill part of the initial connection message has been received
+			// Wait until part of the initial connection message has been received
 			while (clientData.client.Available < Encoding.UTF8.GetByteCount("GET"))
 				Thread.Sleep(1);
 
@@ -34,9 +38,9 @@ namespace WebSocketiny.ConnectionHandlers
 				{
 					MessageSender.SendToSpecific(Handshake.GenerateHandshake(data), clientData);
 				}
-				catch (Exception exep)
+				catch (Exception exception)
 				{
-					Console.WriteLine($"{clientData.id} | Could not accept client connection | {exep}");
+					Console.WriteLine($"{clientData.id} | Could not accept client connection | {exception}");
 				}
 			}
 			else
@@ -45,15 +49,17 @@ namespace WebSocketiny.ConnectionHandlers
 				return;
 			}
 
-			// Add client to active clients and assign that client to a game
+			// Add client to active clients
 			_activeClients.Add(clientData.id, clientData);
+			clientData.ExecConnectionCallback();
 
-			// Start waiting for messages, does not return untill client disconnects
+			// Start waiting for messages, does not return until client disconnects
 			WaitForMessage(clientData);
 
 			// End connection with client
-			clientData.client.GetStream().Close();
-			Console.WriteLine($"{clientData.id} | Closed client connection");
+			clientData.stream.Close();
+			clientData.active = false;
+			clientData.ExecDisconnectCallback();
 		}
 
 		/// <summary>
@@ -62,25 +68,16 @@ namespace WebSocketiny.ConnectionHandlers
 		/// <param name="clientData"></param>
 		private void WaitForMessage(Client clientData)
 		{
-			bool open = true;
-
-			while (open)
+			while (true)
 			{
 				// Close connection if the client disconnected
 				if (!clientData.client.Connected)
-					return;
+					break;
 
-				// Wait untill message data is available
-				while (!clientData.client.GetStream().DataAvailable)
+				// Wait until message data is available
+				while (!clientData.stream.DataAvailable)
 				{
-					// Check if client is still connected
-					if (clientData.client.Client.Poll(1000, SelectMode.SelectRead))
-					{
-						// Remove the client and end WaitForMessage
-						RemoveClient(clientData.id);
-						clientData.ExecDisconnectCallback();
-						return;
-					}
+					// TODO Check if client is still connected
 
 					// Put thread in low priority pool if no data is available
 					Thread.Sleep(1);
@@ -95,15 +92,6 @@ namespace WebSocketiny.ConnectionHandlers
 				}
 
 				clientData.ExecMessageCallback(incomingMessage.content);
-
-				// byte[] resp = Message.GenerateMessage("                     Hello World                     Hello World                          Hello World                     Hello World                   a");
-				// byte[] resp = Message.GenerateMessage("yes my dude");
-
-				// stream.Write(resp, 0, resp.Length);
-
-				// This is just here for testing connection closing
-				// messageAmount++;
-				// open = messageAmount < 50;
 			}
 		}
 
@@ -112,11 +100,11 @@ namespace WebSocketiny.ConnectionHandlers
 		/// </summary>
 		/// <param name="clientData"></param>
 		/// <param name="initial"></param>
-		/// <returns></returns>
-		private byte[] ReadStream(Client clientData, bool initial = false)
+		/// <returns>Read bytes</returns>
+		private static byte[] ReadStream(Client clientData, bool initial = false)
 		{
 			byte[] bytes = new byte[initial ? clientData.client.Available : 1024];
-			clientData.client.GetStream().Read(bytes, 0, bytes.Length);
+			clientData.stream.Read(bytes, 0, bytes.Length);
 			return bytes;
 		}
 
