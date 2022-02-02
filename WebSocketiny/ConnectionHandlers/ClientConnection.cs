@@ -5,7 +5,7 @@ using System.Threading;
 using System.Collections.Generic;
 using WebSocketiny.Decoders;
 using WebSocketiny.Responses;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 using WebSocketiny.ResponseHandlers;
 
 namespace WebSocketiny.ConnectionHandlers

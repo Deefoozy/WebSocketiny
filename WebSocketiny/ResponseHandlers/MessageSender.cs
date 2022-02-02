@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using WebSocketiny.Responses;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 
 namespace WebSocketiny.ResponseHandlers
 {

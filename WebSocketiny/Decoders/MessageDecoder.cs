@@ -28,11 +28,8 @@ namespace WebSocketiny.Decoders
 				case 127:
 					indexFirstMask = 10;
 					break;
-				// TODO implement proper close message check
-				// TODO find issue behind 0 length message
-				// Once proper close has been found the closeConnection parameter should be true
 				case 0:
-					return new ReceivedMessage("", false);
+					return new ReceivedMessage("", true);
 			}
 
 			// Get the 4 masking bytes
@@ -40,7 +37,7 @@ namespace WebSocketiny.Decoders
 			int indexFirstDataByte = indexFirstMask + 4;
 
 			// Create decoded byte array to store the decoded message
-			byte[] decoded = new byte[message.Length - indexFirstDataByte];
+			byte[] decoded = new byte[dataLength];
 
 			// Decode the message
 			for (int encodedIndex = indexFirstDataByte, decodedIndex = 0; encodedIndex < dataLength + indexFirstDataByte; encodedIndex++, decodedIndex++)

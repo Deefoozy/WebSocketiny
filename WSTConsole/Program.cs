@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 using WebSocketiny;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 
 namespace WSTConsole
 {

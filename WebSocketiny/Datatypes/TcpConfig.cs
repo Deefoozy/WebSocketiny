@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace WebSocketiny.Datatypes
+namespace WebSocketiny.DataTypes
 {
 	public class TcpConfig
 	{

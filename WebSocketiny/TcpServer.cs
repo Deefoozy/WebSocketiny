@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using WebSocketiny.ConnectionHandlers;
-using WebSocketiny.Datatypes;
+using WebSocketiny.DataTypes;
 using WebSocketiny.ResponseHandlers;
 using System.Collections.Generic;
 

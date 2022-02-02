@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace WebSocketiny.Datatypes
+namespace WebSocketiny.DataTypes
 {
 	public class Client
 	{
