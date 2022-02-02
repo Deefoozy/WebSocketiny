@@ -19,13 +19,21 @@ namespace WebSocketiny.Decoders
 			// Points to the index of the first masking byte in the message
 			int indexFirstMask = 2;
 
-			// Determine indexFirstMask by looking at the payload length. if the message is empty, create a closing receivedMessage
-			if (dataLength == 126)
-				indexFirstMask = 4;
-			else if (dataLength == 127)
-				indexFirstMask = 10;
-			else if (dataLength == 0)
-				return new ReceivedMessage("", true);
+			// Determine indexFirstMask by looking at the payload length.
+			switch (dataLength)
+			{
+				case 126:
+					indexFirstMask = 4;
+					break;
+				case 127:
+					indexFirstMask = 10;
+					break;
+				// TODO implement proper close message check
+				// TODO find issue behind 0 length message
+				// Once proper close has been found the closeConnection parameter should be true
+				case 0:
+					return new ReceivedMessage("", false);
+			}
 
 			// Get the 4 masking bytes
 			IEnumerable<byte> keys = message.Skip(indexFirstMask).Take(4);
@@ -43,7 +51,7 @@ namespace WebSocketiny.Decoders
 		}
 	}
 
-	class ReceivedMessage
+	struct ReceivedMessage
 	{
 		public readonly string content;
 		public readonly bool close;

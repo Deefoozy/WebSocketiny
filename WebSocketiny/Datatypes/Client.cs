@@ -6,11 +6,13 @@ namespace WebSocketiny.Datatypes
 	{
 		public readonly int id;
 		public readonly TcpClient client;
+		public readonly NetworkStream stream;
 
 		public Client(int passedClientId, TcpClient passedClient)
 		{
 			id = passedClientId;
 			client = passedClient;
+			stream = passedClient.GetStream();
 		}
 
 		public void ExecMessageCallback(string message)

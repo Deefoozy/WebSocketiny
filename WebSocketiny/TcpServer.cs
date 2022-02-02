@@ -4,6 +4,8 @@ using System.Net;
 using System.Threading;
 using WebSocketiny.ConnectionHandlers;
 using WebSocketiny.Datatypes;
+using WebSocketiny.ResponseHandlers;
+using System.Collections.Generic;
 
 namespace WebSocketiny
 {
@@ -12,15 +14,21 @@ namespace WebSocketiny
 		readonly IPEndPoint _endpoint;
 
 		private bool _isAccepting = true;
-		private bool _initiated = false;
+		private bool _initiated;
 		private TcpListener? _server;
-		public int connectionAmount;
+		private int _connectionAmount;
+		private readonly ClientConnection _clientConnection;
+		private readonly Dictionary<int, Client> _activeClients = new Dictionary<int, Client>();
 
 		/// <summary>
 		/// Method that initiates the websocket server
 		/// </summary>
-		public TcpServer(TcpConfig config) {
+		public TcpServer(TcpConfig config)
+		{
 			_endpoint = new IPEndPoint(config.ipAddress, config.port);
+
+			// Set up the clientConnection connectionHandler to be able to accept clients on multiple threads
+			_clientConnection = new ClientConnection(_activeClients);
 		}
 
 		public void Stop()
@@ -38,8 +46,6 @@ namespace WebSocketiny
 				_initiated = true;
 
 			Console.WriteLine("Setting up clientConnection handler");
-			// Set up the clientConnection connectionHandler to be able to accept clients on multiple threads
-			ClientConnection clientConnection = new ClientConnection();
 
 			// Setup server and start listening for connections
 			_server = new TcpListener(_endpoint);
@@ -48,43 +54,48 @@ namespace WebSocketiny
 			Console.WriteLine($"Listener set up and listening on {_endpoint}");
 			Console.WriteLine("Waiting for clients");
 
-			// Loop that keeps accepting users and creates clients within the clientConnection untill the _isAccepting is set to false.
+			// Loop that keeps accepting users and creates clients within the clientConnection until the _isAccepting is set to false.
 			while (_isAccepting)
 			{
 				TcpClient client;
 
-				// Wait untill a client connects
+				// Wait until a client connects
 				try
 				{
 					client = _server.AcceptTcpClient();
 				}
-				catch (SocketException Exception)
+				catch (SocketException exception)
 				{
-					Console.WriteLine("Server disconnect when waiting for client.", Exception.Message);
+					Console.WriteLine("Server disconnect when waiting for client. {0}", exception.Message);
 					return;
 				}
 
-				Client temporaryClient = new Client(connectionAmount, client);
+				Client temporaryClient = new Client(_connectionAmount, client);
 
 				temporaryClient.ReceivedMessageCallback += ReceivedMessage;
 				temporaryClient.DisconnectCallback += ClientDisconnect;
 
-				Console.WriteLine($"Client | {connectionAmount}");
+				Console.WriteLine($"Client | {_connectionAmount}");
 
 				// Start a new thread with the client and start that thread
 				Thread newThread = new Thread(() =>
 				{
-					clientConnection.Accept(temporaryClient);
+					_clientConnection.Accept(temporaryClient);
 					ClientConnected?.Invoke(temporaryClient);
 				});
 
 				newThread.Start();
 
-				connectionAmount++;
+				_connectionAmount++;
 
 				// Instantly close to keep flow simple
 				// _isAccepting = false;
 			}
+		}
+
+		public void Send(string message, int userId)
+		{
+			MessageSender.SendToSpecific(message, _activeClients, userId);
 		}
 
 		public event MessageEventCallback? ReceivedMessage;

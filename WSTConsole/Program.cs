@@ -5,17 +5,18 @@ using WebSocketiny.Datatypes;
 
 namespace WSTConsole
 {
-	class Program
+	static class Program
 	{
-		static void Main(string[] args)
+		private static TcpServer tcpServer;
+		static void Main()
 		{
-			var tcpConfig = new TcpConfig
+			TcpConfig tcpConfig = new()
 			{
 				ipAddress = IPAddress.Any,
-				port = 6942,
+				port = 6944,
 			};
 
-			var tcpServer = new TcpServer(tcpConfig);
+			tcpServer = new(tcpConfig);
 
 			tcpServer.ReceivedMessage += ReceivedMessageHandler;
 
@@ -24,25 +25,27 @@ namespace WSTConsole
 
 		private static void ReceivedMessageHandler(string message, int user)
 		{
-			Console.WriteLine($"Message:");
+			Console.WriteLine("Message:");
 			Console.WriteLine($"id {user} | {message}");
+
+			tcpServer.Send(message, user);
 		}
 
 		private static void ConnectHandler(Client connectedClient)
 		{
-			Console.WriteLine($"Connect:");
+			Console.WriteLine("Connect:");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 
 		private static void DisconnectHandler(Client connectedClient)
 		{
-			Console.WriteLine($"Disconnect:");
+			Console.WriteLine("Disconnect:");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 
 		private static void ErrorHandler(Exception exception)
 		{
-			Console.WriteLine($"Error:");
+			Console.WriteLine("Error:");
 			Console.WriteLine($"Exception {exception}");
 		}
 	}
