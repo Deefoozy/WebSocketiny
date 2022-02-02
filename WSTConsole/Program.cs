@@ -16,7 +16,7 @@ namespace WSTConsole
 				port = 6944,
 			};
 
-			tcpServer = new(tcpConfig);
+			tcpServer = new TcpServer(tcpConfig);
 
 			tcpServer.ReceivedMessage += ReceivedMessageHandler;
 			tcpServer.ClientConnected += ConnectHandler;
@@ -27,7 +27,7 @@ namespace WSTConsole
 
 		private static void ReceivedMessageHandler(string message, int user)
 		{
-			Console.WriteLine("Message:");
+			Console.Write("Message:    ");
 			Console.WriteLine($"id {user} | {message}");
 
 			tcpServer.Send(message, user);
@@ -37,13 +37,13 @@ namespace WSTConsole
 		{
 			if (!connectedClient.active) return;
 
-			Console.WriteLine("Connect:");
+			Console.Write("Connect:    ");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 
 		private static void DisconnectHandler(Client connectedClient)
 		{
-			Console.WriteLine("Disconnect:");
+			Console.Write("Disconnect: ");
 			Console.WriteLine($"id {connectedClient.id}");
 		}
 

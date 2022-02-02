@@ -4,7 +4,7 @@ using System.IO;
 
 namespace WebSocketiny.Responses
 {
-	class Message
+	static class Message
 	{
 		/// <summary>
 		/// Generates message that can be sent to a client
