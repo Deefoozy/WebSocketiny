@@ -8,5 +8,4 @@ namespace WebSocketiny.DataTypes
 		Ping = 9,
 		Pong = 10,
 	}
-
 }
