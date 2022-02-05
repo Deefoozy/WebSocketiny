@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSocketiny", "WebSocketiny\WebSocketiny.csproj", "{FD3C9B80-7DAB-4F35-B286-1A3DB5BA975D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSTConsole", "WSTConsole\WSTConsole.csproj", "{1C1E6C97-BA28-4FE6-A083-066C142D9AD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSTConsole", "WSTConsole\WSTConsole.csproj", "{1C1E6C97-BA28-4FE6-A083-066C142D9AD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSocketiny.Tests", "WebSocketiny.Tests\WebSocketiny.Tests.csproj", "{3A16E4CA-186A-4007-B055-52ADE5DBCD41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{1C1E6C97-BA28-4FE6-A083-066C142D9AD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C1E6C97-BA28-4FE6-A083-066C142D9AD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C1E6C97-BA28-4FE6-A083-066C142D9AD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A16E4CA-186A-4007-B055-52ADE5DBCD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A16E4CA-186A-4007-B055-52ADE5DBCD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A16E4CA-186A-4007-B055-52ADE5DBCD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A16E4CA-186A-4007-B055-52ADE5DBCD41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
